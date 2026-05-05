@@ -1,11 +1,14 @@
 # Dependencies
 node_modules/
+web/node_modules/
 
 # Build output
 dist/
+web/dist/
 
 # Astro build artifacts
 .web/
+web/.astro/
 
 # Environment variables (never commit real keys)
 .env

@@ -36,7 +36,13 @@ Set these in Vercel or `.env.local`:
 
 ## Supabase Setup
 
-Run the migration in `ease-ios/supabase/migrations/0004_add_beta_signups.sql` to create the `beta_signups` table.
+Migrations live in `supabase/migrations/`. Apply with:
+
+```bash
+supabase db push
+```
+
+Or connect your Supabase project to GitHub and enable automatic migrations.
 
 ## Deploy to Vercel
 
