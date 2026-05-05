@@ -36,13 +36,7 @@ Set these in Vercel or `.env.local`:
 
 ## Supabase Setup
 
-Migrations live in `supabase/migrations/`. Apply with:
-
-```bash
-supabase db push
-```
-
-Or connect your Supabase project to GitHub and enable automatic migrations.
+Database schema lives in [ease-deployment](https://github.com/ease-org/ease-deployment) — connected to Supabase for automatic migrations.
 
 ## Deploy to Vercel
 
