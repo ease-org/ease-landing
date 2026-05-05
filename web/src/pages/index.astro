@@ -1,6 +1,7 @@
 ---
 import BetaSignupForm from "../components/BetaSignupForm.svelte";
 import DownloadIOS from "../components/DownloadIOS.svelte";
+import NavCta from "../components/NavCta.svelte";
 ---
 
 <!doctype html>
@@ -37,7 +38,7 @@ import DownloadIOS from "../components/DownloadIOS.svelte";
           <a href="#features">Features</a>
           <a href="#about">About</a>
           <a href="#roadmap">Roadmap</a>
-          <a href="#beta" class="nav-cta">Join Beta</a>
+          <NavCta client:load />
         </nav>
       </div>
     </header>
@@ -490,6 +491,15 @@ import DownloadIOS from "../components/DownloadIOS.svelte";
   .nav-cta:hover {
     background: rgba(108,99,172,0.18) !important;
     color: var(--purple-p) !important;
+  }
+  .nav-cta-member {
+    background: rgba(107,143,113,0.12) !important;
+    border-color: rgba(107,143,113,0.32) !important;
+    color: var(--green-t) !important;
+  }
+  .nav-cta-member:hover {
+    background: rgba(107,143,113,0.2) !important;
+    color: var(--green-t) !important;
   }
 
   /* ── Hero ─────────────────────────────────────────────────── */
