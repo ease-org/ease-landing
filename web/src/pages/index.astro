@@ -194,6 +194,82 @@ import DownloadIOS from "../components/DownloadIOS.svelte";
       </div>
     </section>
 
+    <!-- ░░ ROADMAP ░░ -->
+    <section class="section" id="roadmap">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">ROADMAP</p>
+          <h2>From private beta<br /><span class="text-muted">to FDA-cleared SaMD.</span></h2>
+        </div>
+        <div class="roadmap-grid">
+
+          <div class="rm-card reveal" style="--d:0ms">
+            <div class="rm-header">
+              <span class="rm-badge badge-green">Now</span>
+              <span class="rm-phase">Phase 1</span>
+            </div>
+            <h3 class="rm-title">Private Beta</h3>
+            <ul class="rm-list">
+              <li>Migraine attack logging with fast-entry UI</li>
+              <li>40+ triggers, symptom, and medication tracking</li>
+              <li>Apple HealthKit HRV &amp; sleep sync</li>
+              <li>Daily check-ins &amp; journaling</li>
+              <li>7-day calendar &amp; severity history</li>
+            </ul>
+            <div class="rm-connector" aria-hidden="true"></div>
+          </div>
+
+          <div class="rm-card reveal" style="--d:80ms">
+            <div class="rm-header">
+              <span class="rm-badge badge-orange">In development</span>
+              <span class="rm-phase">Phase 2</span>
+            </div>
+            <h3 class="rm-title">Predictive Intelligence</h3>
+            <ul class="rm-list">
+              <li>Bayesian hierarchical model — personalized risk, not population averages</li>
+              <li>12h &amp; 24h migraine risk scores with credible intervals</li>
+              <li>Calibrated uncertainty: "70% risk, CI 58–82%"</li>
+              <li>Contributing factors breakdown per prediction</li>
+              <li>Staging inference API with full data contracts</li>
+            </ul>
+            <div class="rm-connector" aria-hidden="true"></div>
+          </div>
+
+          <div class="rm-card reveal" style="--d:160ms">
+            <div class="rm-header">
+              <span class="rm-badge badge-purple">Planned</span>
+              <span class="rm-phase">Phase 3</span>
+            </div>
+            <h3 class="rm-title">Clinical Validation</h3>
+            <ul class="rm-list">
+              <li>Real-world pilot cohort (n ≥ 20, ≥ 4 weeks each)</li>
+              <li>Ground-truth labeling protocol &amp; governed eval set</li>
+              <li>Time-split calibration gates (ECE, Brier score)</li>
+              <li>ISO 14971 risk management file</li>
+              <li>Human factors usability study plan</li>
+            </ul>
+            <div class="rm-connector" aria-hidden="true"></div>
+          </div>
+
+          <div class="rm-card reveal" style="--d:240ms">
+            <div class="rm-header">
+              <span class="rm-badge badge-dim">Target</span>
+              <span class="rm-phase">Phase 4</span>
+            </div>
+            <h3 class="rm-title">FDA 510(k) — Class II SaMD</h3>
+            <ul class="rm-list">
+              <li>Quality Management System (ISO 13485 / 21 CFR 820)</li>
+              <li>Design History File (DHF) — complete audit trail</li>
+              <li>Post-Market Surveillance &amp; complaint handling plan</li>
+              <li>510(k) substantial equivalence submission</li>
+              <li>FDA clearance as Class II Software as a Medical Device</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
     <!-- ░░ FOOTER ░░ -->
     <footer class="footer">
       <div class="container">
@@ -652,6 +728,130 @@ import DownloadIOS from "../components/DownloadIOS.svelte";
     letter-spacing: 0.1em;
     color: var(--dim);
     text-transform: uppercase;
+  }
+
+  /* ── Roadmap ──────────────────────────────────────────────── */
+  .roadmap-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  .rm-card {
+    padding: 28px 24px 32px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-right: none;
+    position: relative;
+    transition: background 0.25s;
+  }
+  .rm-card:first-child { border-radius: 18px 0 0 18px; }
+  .rm-card:last-child  { border-radius: 0 18px 18px 0; border-right: 1px solid var(--border); }
+  .rm-card:hover { background: var(--surface-h); }
+
+  /* Arrow connector between phases */
+  .rm-connector {
+    position: absolute;
+    right: -13px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+    height: 25px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .rm-connector::after {
+    content: '›';
+    font-size: 14px;
+    color: var(--dim);
+    line-height: 1;
+    margin-left: 1px;
+  }
+
+  .rm-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .rm-phase {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+
+  .rm-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .badge-green  { background: rgba(107,143,113,0.15); border: 1px solid rgba(107,143,113,0.3);  color: var(--green-t); }
+  .badge-orange { background: rgba(232,132,92,0.12);  border: 1px solid rgba(232,132,92,0.28);  color: var(--orange-l); }
+  .badge-purple { background: rgba(108,99,172,0.12);  border: 1px solid rgba(108,99,172,0.28);  color: var(--purple-l); }
+  .badge-dim    { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); color: var(--muted); }
+
+  .rm-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+  }
+
+  .rm-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .rm-list li {
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--muted);
+    padding-left: 14px;
+    position: relative;
+  }
+  .rm-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--dim);
+  }
+
+  /* Left border accent per phase status */
+  .rm-card:nth-child(1) { border-top: 2px solid rgba(107,143,113,0.4); }
+  .rm-card:nth-child(2) { border-top: 2px solid rgba(232,132,92,0.4); }
+  .rm-card:nth-child(3) { border-top: 2px solid rgba(108,99,172,0.4); }
+  .rm-card:nth-child(4) { border-top: 2px solid rgba(255,255,255,0.07); }
+
+  @media (max-width: 960px) {
+    .roadmap-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .rm-card { border-right: 1px solid var(--border); border-radius: 18px !important; border-top: 2px solid; }
+    .rm-connector { display: none; }
+    .rm-card:nth-child(1) { border-top-color: rgba(107,143,113,0.4); }
+    .rm-card:nth-child(2) { border-top-color: rgba(232,132,92,0.4); }
+    .rm-card:nth-child(3) { border-top-color: rgba(108,99,172,0.4); }
+    .rm-card:nth-child(4) { border-top-color: rgba(255,255,255,0.08); }
+  }
+  @media (max-width: 600px) {
+    .roadmap-grid { grid-template-columns: 1fr; }
   }
 
   /* ── Footer ───────────────────────────────────────────────── */
