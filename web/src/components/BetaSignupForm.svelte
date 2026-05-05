@@ -14,8 +14,13 @@
   });
 
   async function checkAuthCallback() {
+    // Supabase magic link: tokens come via query string (?access_token=...)
+    // OAuth-style flows may use hash (#), so check both
+    const searchParams = new URLSearchParams(window.location.search);
     const hash = window.location.hash;
-    if (hash.includes("access_token") || hash.includes("type=signup") || hash.includes("type=login")) {
+
+    if (searchParams.has("access_token") || searchParams.has("type") ||
+        hash.includes("access_token") || hash.includes("type=signup") || hash.includes("type=login")) {
       status = "loading";
       message = "Completing sign in...";
 
@@ -27,8 +32,12 @@
       } else if (error) {
         status = "error";
         message = error.message;
-        window.history.replaceState({}, "", window.location.pathname);
       }
+      // Clean up URL (remove auth params) but stay on current page
+      const cleanUrl = new URL(window.location.href);
+      cleanUrl.search = "";
+      cleanUrl.hash = "";
+      window.history.replaceState({}, "", cleanUrl.pathname);
     }
   }
 
