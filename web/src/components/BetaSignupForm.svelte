@@ -10,8 +10,6 @@
 
   onMount(() => {
     supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
-    // Check if we're returning from magic link callback
     checkAuthCallback();
   });
 
@@ -20,10 +18,9 @@
     if (hash.includes("access_token") || hash.includes("type=signup") || hash.includes("type=login")) {
       status = "loading";
       message = "Completing sign in...";
-      
-      // Let Supabase handle the token from URL hash
+
       const { data: { user }, error } = await supabase.auth.getUser();
-      
+
       if (user) {
         status = "signed_in";
         await createBetaSignup(user.id, user.email);
@@ -36,12 +33,9 @@
   }
 
   async function createBetaSignup(userId: string, userEmail: string | null) {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from("beta_signups")
-      .insert({ 
-        user_id: userId,
-        email: userEmail 
-      })
+      .insert({ user_id: userId, email: userEmail })
       .select()
       .single();
 
@@ -67,11 +61,9 @@
     status = "loading";
     message = "";
 
-    // Send magic link - this both signs up AND logs in if new user
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        // Redirect to this page after clicking the link
         emailRedirectTo: `${window.location.origin}${window.location.pathname}`,
       },
     });
@@ -86,152 +78,167 @@
   }
 </script>
 
-<section class="signup-form">
-  <h2>Join the Beta</h2>
-  <p>Be the first to experience Ease. Enter your email to get early access.</p>
-
+<div class="signup">
   {#if status === "success"}
-    <div class="success-message">
-      <span class="checkmark">✓</span>
+    <div class="state-card success">
+      <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
       <p>{message}</p>
     </div>
+
+  {:else if status === "signed_in"}
+    <div class="state-card loading">
+      <svg class="s-icon spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+      <p>Completing sign in…</p>
+    </div>
+
   {:else if status === "sent"}
-    <div class="sent-message">
-      <span class="mail-icon">✉️</span>
-      <p>{message}</p>
-      <p class="hint">Click the link in your email to complete sign-up.</p>
+    <div class="state-card sent">
+      <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <div>
+        <p>{message}</p>
+        <p class="hint">Click the link in your email to complete sign-up.</p>
+      </div>
     </div>
+
   {:else}
     <form on:submit={handleSubmit}>
-      <div class="input-group">
+      <div class="row">
         <input
           type="email"
           bind:value={email}
           placeholder="your@email.com"
           required
           disabled={status === "loading"}
+          autocomplete="email"
         />
         <button type="submit" disabled={status === "loading"}>
-          {status === "loading" ? "Sending..." : "Get Early Access"}
+          {status === "loading" ? "Sending…" : "Get early access"}
         </button>
       </div>
-      {#if message}
-        <p class="error-message">{message}</p>
+      {#if message && status === "error"}
+        <p class="error">{message}</p>
       {/if}
     </form>
   {/if}
-</section>
+</div>
 
 <style>
-  .signup-form {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    padding: 2rem;
-    backdrop-filter: blur(10px);
-  }
+  .signup { width: 100%; }
 
-  h2 {
-    font-size: 1.75rem;
-    margin: 0 0 0.5rem 0;
-    color: #1f1f1f;
-  }
+  form { width: 100%; }
 
-  p {
-    color: #666;
-    margin: 0 0 1.5rem 0;
-  }
-
-  .input-group {
+  .row {
     display: flex;
-    gap: 0.5rem;
+    gap: 8px;
+    max-width: 460px;
+    margin: 0 auto;
   }
 
   input {
     flex: 1;
-    padding: 0.75rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    background: white;
+    min-width: 0;
+    padding: 13px 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text, #EDEAF2);
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
   }
-
+  input::placeholder { color: var(--dim, #5A5770); }
   input:focus {
     outline: none;
-    border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    border-color: rgba(108,99,172,0.65);
+    background: rgba(255,255,255,0.08);
+    box-shadow: 0 0 0 3px rgba(108,99,172,0.14);
   }
-
-  input:disabled {
-    background: #f5f5f5;
-    cursor: not-allowed;
-  }
+  input:disabled { opacity: 0.45; cursor: not-allowed; }
 
   button {
-    padding: 0.75rem 1.5rem;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    color: white;
+    padding: 13px 22px;
+    background: var(--purple, #6C63AC);
+    color: #fff;
     border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
     white-space: nowrap;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
   }
-
   button:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    background: #7a72bc;
+    box-shadow: 0 4px 22px rgba(108,99,172,0.45);
+    transform: translateY(-1px);
   }
+  button:active:not(:disabled) { transform: translateY(0); }
+  button:disabled { opacity: 0.55; cursor: not-allowed; }
 
-  button:active:not(:disabled) {
-    transform: translateY(0);
-  }
-
-  button:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-  }
-
-  .success-message,
-  .sent-message {
+  .state-card {
     display: flex;
-    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    max-width: 460px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .success {
+    background: rgba(107,143,113,0.12);
+    border: 1px solid rgba(107,143,113,0.28);
+  }
+  .sent {
+    background: rgba(108,99,172,0.1);
+    border: 1px solid rgba(108,99,172,0.28);
+  }
+  .loading {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
     align-items: center;
-    gap: 0.5rem;
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: center;
   }
 
-  .success-message {
-    background: #ecfdf5;
-    color: #065f46;
-  }
-
-  .sent-message {
-    background: #eff6ff;
-    color: #1e40af;
-  }
-
-  .checkmark,
-  .mail-icon {
-    font-size: 1.5rem;
-  }
-
-  .success-message p,
-  .sent-message p {
+  .state-card p {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-2, #E0DDE6);
     margin: 0;
+    line-height: 1.5;
   }
-
   .hint {
-    font-size: 0.875rem;
-    opacity: 0.8;
+    font-size: 12px !important;
+    color: var(--muted, #7A7690) !important;
+    margin-top: 4px !important;
   }
 
-  .error-message {
-    color: #dc2626;
-    margin: 0.75rem 0 0 0;
-    font-size: 0.875rem;
+  .s-icon {
+    flex-shrink: 0;
+    width: 17px;
+    height: 17px;
+    margin-top: 1px;
+  }
+  .success .s-icon { color: var(--green-t, #9BC4A2); }
+  .sent    .s-icon { color: var(--purple-l, #A8A0D6); }
+  .loading .s-icon { color: var(--muted, #7A7690); }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .spin { animation: spin 1s linear infinite; }
+
+  .error {
+    font-size: 12px;
+    color: #f08080;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 520px) {
+    .row { flex-direction: column; }
+    button { width: 100%; }
   }
 </style>

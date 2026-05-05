@@ -3,245 +3,688 @@ import BetaSignupForm from "../components/BetaSignupForm.svelte";
 import DownloadIOS from "../components/DownloadIOS.svelte";
 ---
 
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Ease — Your Personal Health Companion</title>
-    <meta name="description" content="Ease helps you understand your body through continuous health monitoring. Join the beta." />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ease — Migraine Tracking</title>
+    <meta name="description" content="Track migraine attacks, identify triggers, and discover personalized insights that help you live better. Join the private beta." />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>" />
-    <style>
-      :root {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        color: #1f1f1f;
-        background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f0 100%);
-        min-height: 100vh;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-      }
-
-      /* Header */
-      header {
-        padding: 1.5rem 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      .logo {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #6366f1;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .logo-icon {
-        font-size: 1.75rem;
-      }
-
-      nav {
-        display: flex;
-        gap: 2rem;
-      }
-
-      nav a {
-        color: #666;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.2s;
-      }
-
-      nav a:hover {
-        color: #6366f1;
-      }
-
-      /* Hero */
-      .hero {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 4rem 2rem 6rem;
-        text-align: center;
-      }
-
-      .hero h1 {
-        font-size: 3.5rem;
-        font-weight: 800;
-        background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        margin: 0 0 1.5rem 0;
-        line-height: 1.2;
-      }
-
-      .hero .tagline {
-        font-size: 1.5rem;
-        color: #555;
-        max-width: 600px;
-        margin: 0 auto 3rem;
-        line-height: 1.6;
-      }
-
-      /* Features */
-      .features {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 2rem 6rem;
-      }
-
-      .features-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 2rem;
-      }
-
-      .feature-card {
-        background: white;
-        border-radius: 16px;
-        padding: 2rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-        transition: transform 0.3s, box-shadow 0.3s;
-      }
-
-      .feature-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px -8px rgba(99, 102, 241, 0.15);
-      }
-
-      .feature-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-      }
-
-      .feature-card h3 {
-        font-size: 1.25rem;
-        margin: 0 0 0.75rem 0;
-        color: #1f1f1f;
-      }
-
-      .feature-card p {
-        color: #666;
-        margin: 0;
-        line-height: 1.6;
-      }
-
-      /* CTA Section */
-      .cta-section {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 0 2rem 6rem;
-      }
-
-      /* Download Section */
-      .download-section {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 0 2rem 6rem;
-      }
-
-      /* Footer */
-      footer {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem;
-        text-align: center;
-        color: #888;
-        font-size: 0.875rem;
-        border-top: 1px solid #e5e7eb;
-      }
-
-      /* Responsive */
-      @media (max-width: 768px) {
-        header {
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .hero h1 {
-          font-size: 2.5rem;
-        }
-
-        .hero .tagline {
-          font-size: 1.25rem;
-        }
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <header>
-      <div class="logo">
-        <span class="logo-icon">🌿</span>
-        <span>Ease</span>
+
+    <!-- ░░ ATMOSPHERIC DEPTH ░░ -->
+    <div class="atmosphere" aria-hidden="true">
+      <div class="orb orb-purple"></div>
+      <div class="orb orb-green"></div>
+      <div class="orb orb-orange"></div>
+    </div>
+
+    <!-- ░░ NAV ░░ -->
+    <header class="nav">
+      <div class="nav-inner">
+        <a class="logo" href="/">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22V12M12 12C12 7 17 3 17 3s-1 5-5 9M12 12C12 7 7 3 7 3s1 5 5 9"/>
+          </svg>
+          ease
+        </a>
+        <nav aria-label="Main navigation">
+          <a href="#features">Features</a>
+          <a href="#about">About</a>
+          <a href="#beta" class="nav-cta">Join Beta</a>
+        </nav>
       </div>
-      <nav>
-        <a href="#features">Features</a>
-        <a href="#signup">Sign Up</a>
-      </nav>
     </header>
 
-    <main>
-      <section class="hero">
-        <h1>Understand Your Body,<br />Simplified.</h1>
-        <p class="tagline">
-          Ease connects with Apple HealthKit to help you discover patterns, 
-          predict onset events, and gain insights into your well-being — 
-          all processed locally on your device.
+    <!-- ░░ HERO ░░ -->
+    <section class="hero">
+      <div class="hero-halo" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="eyebrow reveal">MIGRAINE TRACKING · PRIVATE BETA</p>
+        <h1 class="hero-title reveal" style="--d:80ms">
+          Know your <em>triggers</em>.<br />Take back your days.
+        </h1>
+        <p class="hero-sub reveal" style="--d:160ms">
+          Ease logs your migraine attacks, surfaces trigger patterns, and puts personalized insights in your pocket — all kept completely private.
         </p>
-      </section>
+        <div class="hero-form reveal" id="beta" style="--d:240ms">
+          <BetaSignupForm client:load />
+        </div>
+        <div class="hero-app reveal" style="--d:320ms">
+          <DownloadIOS client:load />
+        </div>
+      </div>
+    </section>
 
-      <section class="features" id="features">
+    <!-- ░░ FEATURES ░░ -->
+    <section class="section features" id="features">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">WHAT EASE DOES</p>
+          <h2>Everything you need.<br /><span class="text-muted">Nothing you don't.</span></h2>
+        </div>
         <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">📊</div>
+
+          <article class="card reveal" style="--d:0ms">
+            <div class="card-icon icon-purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
             <h3>Continuous Monitoring</h3>
-            <p>Track your health metrics around the clock. See trends emerge over days, weeks, and months.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">⚡</div>
+            <p>Log attacks as they happen with quick-entry flows designed for when you're in pain.</p>
+          </article>
+
+          <article class="card reveal" style="--d:60ms">
+            <div class="card-icon icon-orange">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </div>
             <h3>Early Onset Detection</h3>
-            <p>Our ML models learn your patterns and help predict when something might be coming — before it arrives.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">🔒</div>
+            <p>Spot prodrome symptoms early and take action before a full attack sets in.</p>
+          </article>
+
+          <article class="card reveal" style="--d:120ms">
+            <div class="card-icon icon-green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
             <h3>Privacy First</h3>
-            <p>Your health data never leaves your device. All processing happens locally — you stay in control.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">📱</div>
+            <p>Your health data stays on your device. We never sell or share what you track.</p>
+          </article>
+
+          <article class="card reveal" style="--d:180ms">
+            <div class="card-icon icon-purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
             <h3>Apple HealthKit</h3>
-            <p>Seamlessly integrates with Apple HealthKit. Import your existing health history in seconds.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">🎯</div>
+            <p>Sync seamlessly with Apple Health to enrich your data with sleep, activity, and vitals.</p>
+          </article>
+
+          <article class="card reveal" style="--d:240ms">
+            <div class="card-icon icon-orange">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            </div>
             <h3>Personalized Insights</h3>
-            <p>Not generic advice — your insights based on your unique biology and lifestyle patterns.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">🌙</div>
+            <p>Discover your unique trigger patterns with AI-powered analysis of your history.</p>
+          </article>
+
+          <article class="card reveal" style="--d:300ms">
+            <div class="card-icon icon-green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
             <h3>Daily Journaling</h3>
-            <p>Simple daily check-ins help correlate how you feel with what's happening in your body.</p>
+            <p>Simple check-ins build a full picture of your health, helping correlate how you feel.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ░░ PHILOSOPHY ░░ -->
+    <section class="section" id="about">
+      <div class="container">
+        <div class="philosophy reveal">
+          <div class="philosophy-text">
+            <p class="eyebrow">OUR APPROACH</p>
+            <h2>Built for people who live with migraines.</h2>
+            <p class="body-text">
+              Every interface decision — from the dark-first theme to the quick-entry flows — is built around one question: <em>how does this feel when your head is pounding?</em>
+            </p>
+            <div class="stats">
+              <div class="stat">
+                <span class="stat-n">40+</span>
+                <span class="stat-l">TRACKED TRIGGERS</span>
+              </div>
+              <span class="stat-div" aria-hidden="true"></span>
+              <div class="stat">
+                <span class="stat-n">3</span>
+                <span class="stat-l">SEVERITY LEVELS</span>
+              </div>
+              <span class="stat-div" aria-hidden="true"></span>
+              <div class="stat">
+                <span class="stat-n">100%</span>
+                <span class="stat-l">PRIVATE</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="philosophy-vis" aria-label="Week view showing migraine severity dots">
+            <div class="week-strip">
+              <div class="week-day">
+                <span class="wd-label">MON</span>
+                <span class="dot" style="--c:#6B8F71;--g:rgba(107,143,113,0.55)"></span>
+                <span class="wd-num">28</span>
+              </div>
+              <div class="week-day">
+                <span class="wd-label">TUE</span>
+                <span class="dot" style="--c:#6B8F71;--g:rgba(107,143,113,0.55)"></span>
+                <span class="wd-num">29</span>
+              </div>
+              <div class="week-day today">
+                <span class="wd-label">WED</span>
+                <span class="dot" style="--c:#E8845C;--g:rgba(232,132,92,0.55)"></span>
+                <span class="wd-num">30</span>
+              </div>
+              <div class="week-day">
+                <span class="wd-label">THU</span>
+                <span class="dot" style="--c:#6B8F71;--g:rgba(107,143,113,0.55)"></span>
+                <span class="wd-num">31</span>
+              </div>
+              <div class="week-day severe">
+                <span class="wd-label">FRI</span>
+                <span class="dot" style="--c:#A34A4A;--g:rgba(163,74,74,0.6)"></span>
+                <span class="wd-num">1</span>
+              </div>
+              <div class="week-day">
+                <span class="wd-label">SAT</span>
+                <span class="dot" style="--c:#6B8F71;--g:rgba(107,143,113,0.55)"></span>
+                <span class="wd-num">2</span>
+              </div>
+              <div class="week-day">
+                <span class="wd-label">SUN</span>
+                <span class="dot" style="--c:#6B8F71;--g:rgba(107,143,113,0.55)"></span>
+                <span class="wd-num">3</span>
+              </div>
+            </div>
+            <p class="vis-label">LAST 7 DAYS</p>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section class="cta-section" id="signup">
-        <BetaSignupForm client:load />
-      </section>
-
-      <section class="download-section">
-        <DownloadIOS client:load />
-      </section>
-    </main>
-
-    <footer>
-      <p>Ease — Your Personal Health Companion</p>
+    <!-- ░░ FOOTER ░░ -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-row">
+          <a class="logo" href="/">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 22V12M12 12C12 7 17 3 17 3s-1 5-5 9M12 12C12 7 7 3 7 3s1 5 5 9"/>
+            </svg>
+            ease
+          </a>
+          <p class="footer-copy">© 2024 Ease Health. Made with care.</p>
+        </div>
+      </div>
     </footer>
+
+    <script>
+      // ── Scroll reveal ──────────────────────────────────────
+      const io = new IntersectionObserver(
+        (entries) => entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+        }),
+        { threshold: 0.08, rootMargin: '0px 0px -32px 0px' }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+      // ── Card 3D tilt ───────────────────────────────────────
+      document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+        card.addEventListener('mousemove', (ev) => {
+          const r = card.getBoundingClientRect();
+          const x = ev.clientX - r.left, y = ev.clientY - r.top;
+          const cx = r.width / 2, cy = r.height / 2;
+          card.style.transform =
+            `perspective(520px) rotateX(${((y - cy) / cy) * -5}deg) rotateY(${((x - cx) / cx) * 5}deg) translateY(-4px)`;
+        });
+        card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+      });
+    </script>
+
   </body>
 </html>
+
+<style is:global>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #1B1B2F;
+    --surface:   rgba(255,255,255,0.035);
+    --surface-2: rgba(255,255,255,0.055);
+    --surface-h: rgba(108,99,172,0.08);
+    --border:    rgba(255,255,255,0.07);
+    --border-h:  rgba(108,99,172,0.38);
+    --text:      #EDEAF2;
+    --text-2:    #E0DDE6;
+    --muted:     #7A7690;
+    --dim:       #5A5770;
+    --purple:    #6C63AC;
+    --purple-l:  #A8A0D6;
+    --purple-p:  #C0B8E8;
+    --green:     #6B8F71;
+    --green-t:   #9BC4A2;
+    --orange:    #E8845C;
+    --orange-l:  #f0a882;
+    --radius:    18px;
+    --font:      'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Grain texture overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='1'/></svg>");
+    background-size: 200px 200px;
+    opacity: 0.028;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── Atmospheric orbs ─────────────────────────────────────── */
+  .atmosphere {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    animation: drift 28s ease-in-out infinite;
+  }
+  .orb-purple {
+    width: 660px; height: 660px;
+    background: radial-gradient(circle, rgba(108,99,172,0.28) 0%, transparent 70%);
+    top: -130px; left: -130px;
+    animation-duration: 26s;
+  }
+  .orb-green {
+    width: 460px; height: 460px;
+    background: radial-gradient(circle, rgba(107,143,113,0.20) 0%, transparent 70%);
+    bottom: 8%; right: -110px;
+    animation-duration: 34s;
+    animation-delay: -10s;
+    animation-direction: alternate-reverse;
+  }
+  .orb-orange {
+    width: 390px; height: 390px;
+    background: radial-gradient(circle, rgba(232,132,92,0.16) 0%, transparent 70%);
+    bottom: -70px; left: 22%;
+    animation-duration: 24s;
+    animation-delay: -6s;
+  }
+  @keyframes drift {
+    0%,100% { transform: translate(0, 0); }
+    30%      { transform: translate(22px, -38px); }
+    60%      { transform: translate(-16px, 22px); }
+  }
+
+  /* ── Layout ───────────────────────────────────────────────── */
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+  }
+  .section { padding: 96px 0; }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .text-muted { color: var(--muted); }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+    transition-delay: var(--d, 0ms);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── Navigation ───────────────────────────────────────────── */
+  .nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    padding: 0 24px;
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    background: rgba(27,27,47,0.72);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    flex-shrink: 0;
+  }
+  .logo svg { color: var(--purple-l); }
+
+  .nav nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .nav nav a {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav nav a:hover { color: var(--text); }
+  .nav-cta {
+    padding: 7px 15px !important;
+    background: var(--surface-2) !important;
+    border: 1px solid rgba(108,99,172,0.35) !important;
+    border-radius: 10px !important;
+    color: var(--purple-p) !important;
+    font-weight: 600 !important;
+    font-size: 12px !important;
+    letter-spacing: 0.01em !important;
+    transition: background 0.2s, color 0.2s !important;
+  }
+  .nav-cta:hover {
+    background: rgba(108,99,172,0.18) !important;
+    color: var(--purple-p) !important;
+  }
+
+  /* ── Hero ─────────────────────────────────────────────────── */
+  .hero {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    padding: 120px 24px 80px;
+    text-align: center;
+  }
+  .hero-halo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -58%);
+    width: 740px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(108,99,172,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .hero-content {
+    max-width: 660px;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-title {
+    font-size: clamp(40px, 6.5vw, 74px);
+    font-weight: 800;
+    line-height: 1.07;
+    letter-spacing: -0.035em;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+  .hero-title em {
+    font-style: normal;
+    background: linear-gradient(125deg, var(--purple-l) 0%, var(--purple-p) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--muted);
+    margin-bottom: 40px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-form { margin-bottom: 16px; }
+  .hero-app  { opacity: 0.78; }
+
+  /* ── Features ─────────────────────────────────────────────── */
+  .section-head {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .section-head h2 {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .card {
+    padding: 28px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 28px rgba(0,0,0,0.22);
+    transition: background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.15s ease-out;
+    cursor: default;
+    will-change: transform;
+  }
+  .card:hover {
+    background: var(--surface-h);
+    border-color: var(--border-h);
+    box-shadow: 0 8px 44px rgba(0,0,0,0.38), 0 0 0 1px rgba(108,99,172,0.12);
+  }
+  .card-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    flex-shrink: 0;
+  }
+  .card-icon svg { width: 20px; height: 20px; }
+  .icon-purple { background: rgba(108,99,172,0.15); color: var(--purple-l); box-shadow: 0 0 16px rgba(108,99,172,0.15); }
+  .icon-green  { background: rgba(107,143,113,0.12); color: var(--green-t);  box-shadow: 0 0 16px rgba(107,143,113,0.12); }
+  .icon-orange { background: rgba(232,132,92,0.12);  color: var(--orange-l); box-shadow: 0 0 16px rgba(232,132,92,0.12); }
+  .card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .card p {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  /* ── Philosophy ───────────────────────────────────────────── */
+  .philosophy {
+    display: flex;
+    gap: 64px;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 52px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 48px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.04);
+    position: relative;
+    overflow: hidden;
+  }
+  .philosophy::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(108,99,172,0.5) 50%, transparent 100%);
+  }
+  .philosophy-text { flex: 1; min-width: 0; }
+  .philosophy-text h2 {
+    font-size: clamp(22px, 3vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .body-text {
+    font-size: 15px;
+    line-height: 1.72;
+    color: var(--muted);
+    margin-bottom: 36px;
+  }
+  .body-text em { font-style: italic; color: var(--text-2); }
+
+  .stats {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .stat { display: flex; flex-direction: column; gap: 3px; }
+  .stat-n {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text);
+  }
+  .stat-l {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+  .stat-div {
+    width: 1px; height: 36px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  /* Philosophy visual — week strip */
+  .philosophy-vis {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .week-strip {
+    display: flex;
+    gap: 4px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px 16px;
+  }
+  .week-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    min-width: 30px;
+  }
+  .wd-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+  .wd-num {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--c);
+    box-shadow: 0 0 8px var(--g);
+    animation: glow 2.8s ease-in-out infinite;
+  }
+  .week-day:nth-child(2) .dot { animation-delay: 0.35s; }
+  .week-day:nth-child(3) .dot { animation-delay: 0.70s; }
+  .week-day:nth-child(4) .dot { animation-delay: 1.05s; }
+  .week-day:nth-child(5) .dot { animation-delay: 1.40s; }
+  .week-day:nth-child(6) .dot { animation-delay: 1.75s; }
+  .week-day:nth-child(7) .dot { animation-delay: 2.10s; }
+  .today .wd-num { color: var(--purple-l); font-weight: 700; }
+  .severe .dot   { box-shadow: 0 0 12px rgba(163,74,74,0.7); }
+  @keyframes glow {
+    0%,100% { opacity: 0.62; }
+    50%     { opacity: 1; }
+  }
+  .vis-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+
+  /* ── Footer ───────────────────────────────────────────────── */
+  .footer {
+    padding: 36px 0;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 2;
+  }
+  .footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .footer-copy {
+    font-size: 12px;
+    color: var(--dim);
+  }
+
+  /* ── Responsive ───────────────────────────────────────────── */
+  @media (max-width: 920px) {
+    .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .philosophy { flex-direction: column; gap: 36px; padding: 36px; }
+    .philosophy-vis { align-self: flex-start; }
+  }
+  @media (max-width: 600px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .nav nav a:not(.nav-cta) { display: none; }
+    .hero-title { font-size: clamp(34px, 10vw, 52px); }
+    .hero-sub { font-size: 15px; }
+    .stats { gap: 12px; }
+    .philosophy { padding: 24px; }
+    .footer-row { flex-direction: column; gap: 10px; text-align: center; }
+    .section { padding: 72px 0; }
+  }
+</style>
