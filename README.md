@@ -1,4 +1,6 @@
 # Ease Landing Page
+<!-- SPDX-License: MIT -->
+<!-- Copyright (c) 2026 Ease Health -->
 
 Public landing page for Ease — Your Personal Health Companion.
 
