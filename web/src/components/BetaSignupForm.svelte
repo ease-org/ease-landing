@@ -73,7 +73,7 @@
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}${window.location.pathname}`,
+        emailRedirectTo: `${window.location.origin}/beta`,
       },
     });
 
