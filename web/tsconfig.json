@@ -1,0 +1,8 @@
+{
+  // Strict Astro TypeScript baseline for safer template and component code.
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    // Enables absolute imports rooted at the web project folder when needed.
+    "baseUrl": "."
+  }
+}
