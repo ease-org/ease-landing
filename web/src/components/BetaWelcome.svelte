@@ -81,26 +81,14 @@
         <div class="step">
           <div class="step-num">2</div>
           <div class="step-body">
-            <span class="step-title">Install TestFlight</span>
-            <span class="step-desc">
-              Download TestFlight from the App Store — you'll need it to install Ease when your invite arrives.
-              <a class="inline-link" href="https://apps.apple.com/app/testflight/id899247664" target="_blank" rel="noopener noreferrer">Get TestFlight →</a>
-            </span>
-          </div>
-          <span class="step-tag tag-orange">Prepare now</span>
-        </div>
-
-        <div class="step">
-          <div class="step-num">3</div>
-          <div class="step-body">
-            <span class="step-title">Receive your TestFlight invite</span>
+            <span class="step-title">Receive your invite</span>
             <span class="step-desc">We onboard beta users in small waves. You'll get an email at <strong>{user.email}</strong> when your slot is ready.</span>
           </div>
           <span class="step-tag tag-dim">Pending</span>
         </div>
 
         <div class="step">
-          <div class="step-num">4</div>
+          <div class="step-num">3</div>
           <div class="step-body">
             <span class="step-title">Start tracking</span>
             <span class="step-desc">Install Ease, connect Apple HealthKit, and start logging. Your data helps calibrate the predictive models.</span>
@@ -335,16 +323,6 @@
     color: var(--muted, #7A7690);
   }
   .step-desc strong { color: var(--text-2, #E0DDE6); font-weight: 600; }
-  .inline-link {
-    display: block;
-    margin-top: 6px;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--purple-l, #A8A0D6);
-    text-decoration: none;
-    letter-spacing: 0.01em;
-  }
-  .inline-link:hover { color: var(--purple-p, #C0B8E8); }
 
   .step-tag {
     font-size: 10px;
