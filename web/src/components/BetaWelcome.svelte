@@ -11,8 +11,24 @@
   onMount(async () => {
     supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Supabase auto-exchanges the magic link token from the URL hash
-    const { data: { session } } = await supabase.auth.getSession();
+    let session = null;
+
+    // PKCE flow: magic link delivers ?code=... — must be exchanged explicitly
+    const code = new URLSearchParams(window.location.search).get("code");
+    if (code) {
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+      if (error) {
+        window.location.replace("/#beta");
+        return;
+      }
+      session = data.session;
+      // Remove the code from the URL so refreshing the page doesn't re-use it
+      window.history.replaceState({}, "", window.location.pathname);
+    } else {
+      // Returning user: check for an existing session
+      const { data } = await supabase.auth.getSession();
+      session = data.session;
+    }
 
     if (!session) {
       window.location.replace("/#beta");
