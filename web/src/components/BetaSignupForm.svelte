@@ -2,6 +2,7 @@
   import { createClient, type SupabaseClient } from "@supabase/supabase-js";
   import { onMount } from "svelte";
   import { SUPABASE_URL, SUPABASE_ANON_KEY } from "../lib/env";
+  import OAuthButtons from "./OAuthButtons.svelte";
 
   let email = "";
   let status: "idle" | "loading" | "sent" | "signed_in" | "success" | "error" = "idle";
@@ -14,11 +15,40 @@
   });
 
   async function checkAuthCallback() {
-    // Supabase magic link: tokens come via query string (?access_token=...)
-    // OAuth-style flows may use hash (#), so check both
+    // Supabase PKCE OAuth callback: ?code= from signInWithOAuth redirect
     const searchParams = new URLSearchParams(window.location.search);
+    const code = searchParams.get("code");
     const hash = window.location.hash;
 
+    // Handle PKCE code exchange first
+    if (code) {
+      status = "loading";
+      message = "Completing sign in...";
+
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+      if (error || !data.session) {
+        status = "error";
+        message = error?.message ?? "Authentication failed.";
+        const cleanUrl = new URL(window.location.href);
+        cleanUrl.search = "";
+        cleanUrl.hash = "";
+        window.history.replaceState({}, "", cleanUrl.pathname);
+        return;
+      }
+
+      const { user } = data.session;
+      if (user) {
+        status = "signed_in";
+        await createBetaSignup(user.id, user.email);
+      }
+      const cleanUrl = new URL(window.location.href);
+      cleanUrl.search = "";
+      cleanUrl.hash = "";
+      window.history.replaceState({}, "", cleanUrl.pathname);
+      return;
+    }
+
+    // Magic link / OAuth session check
     if (searchParams.has("access_token") || searchParams.has("type") ||
         hash.includes("access_token") || hash.includes("type=signup") || hash.includes("type=login")) {
       status = "loading";
@@ -33,7 +63,6 @@
         status = "error";
         message = error.message;
       }
-      // Clean up URL (remove auth params) but stay on current page
       const cleanUrl = new URL(window.location.href);
       cleanUrl.search = "";
       cleanUrl.hash = "";
@@ -111,6 +140,8 @@
 
   {:else}
     <form on:submit={handleSubmit}>
+      <OAuthButtons redirectTo={`${window.location.origin}/beta`} />
+      <div class="divider"><span>or continue with email</span></div>
       <div class="row">
         <input
           type="email"
@@ -141,6 +172,30 @@
     gap: 8px;
     max-width: 460px;
     margin: 0 auto;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 460px;
+    margin: 16px auto;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .divider span {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--dim, #5A5770);
+    white-space: nowrap;
+    letter-spacing: 0.03em;
   }
 
   input {

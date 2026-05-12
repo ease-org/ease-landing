@@ -1,0 +1,111 @@
+---
+// OAuth callback page — handles PKCE code exchange from Supabase OAuth redirects.
+// Since Astro is in static mode, this runs client-side JavaScript to exchange the code
+// and then redirects to the appropriate page.
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authenticating… — Ease</title>
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Completing sign in…</p>
+    </div>
+
+    <script>
+      import { createClient } from "@supabase/supabase-js";
+      import { SUPABASE_URL, SUPABASE_ANON_KEY } from "../../lib/env";
+
+      const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      async function handleCallback() {
+        const url = new URL(window.location.href);
+        const code = url.searchParams.get("code");
+        const next = url.searchParams.get("redirectTo") ?? "/beta";
+        const error = url.searchParams.get("error");
+
+        if (error) {
+          window.location.replace(`/?auth_error=${encodeURIComponent(error)}`);
+          return;
+        }
+
+        if (!code) {
+          window.location.replace("/beta");
+          return;
+        }
+
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+
+        if (exchangeError) {
+          window.location.replace(`/?auth_error=${encodeURIComponent(exchangeError.message)}`);
+          return;
+        }
+
+        // Clean the URL then redirect
+        url.search = "";
+        url.hash = "";
+        window.location.replace(next);
+      }
+
+      handleCallback();
+    </script>
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --bg: #1B1B2F;
+        --text: #EDEAF2;
+        --muted: #7A7690;
+        --purple: #6C63AC;
+        --purple-l: #A8A0D6;
+        --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .spinner {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 3px solid rgba(255, 255, 255, 0.15);
+        border-top-color: var(--purple-l);
+        animation: spin 0.9s linear infinite;
+      }
+
+      p {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--muted);
+        letter-spacing: 0.01em;
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+  </body>
+</html>

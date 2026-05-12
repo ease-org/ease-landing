@@ -2,6 +2,7 @@
   import { createClient, type Session, type SupabaseClient } from "@supabase/supabase-js";
   import { onMount } from "svelte";
   import { SUPABASE_ANON_KEY, SUPABASE_URL } from "../lib/env";
+  import OAuthButtons from "./OAuthButtons.svelte";
 
   type ViewState = "loading" | "login" | "consent" | "submitting" | "link-sent" | "error";
 
@@ -204,6 +205,10 @@
       {/if}
 
       <form class="auth-form" on:submit|preventDefault={signInWithPassword}>
+        <OAuthButtons
+          redirectTo={window.location.href}
+        />
+        <div class="divider"><span>or sign in with email</span></div>
         <label>
           <span>Email</span>
           <input bind:value={email} type="email" autocomplete="email" placeholder="you@ease-health.org" required />
@@ -496,6 +501,29 @@
 
   .hint {
     margin-top: 14px;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0 4px;
+  }
+
+  .divider::before,
+  .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .divider span {
+    font-size: 11px;
+    font-weight: 500;
+    color: #7a7690;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
   }
 
   @keyframes spin {
