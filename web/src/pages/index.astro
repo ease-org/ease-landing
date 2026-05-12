@@ -282,6 +282,10 @@ import NavCta from "../components/NavCta.svelte";
             </svg>
             ease
           </a>
+          <div class="footer-links">
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Use</a>
+          </div>
           <p class="footer-copy">© 2026 Ease Health. Made with care.</p>
         </div>
       </div>
@@ -876,7 +880,21 @@ import NavCta from "../components/NavCta.svelte";
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
   }
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+  .footer-links a {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--text); }
   .footer-copy {
     font-size: 12px;
     color: var(--dim);
