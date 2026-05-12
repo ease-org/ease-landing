@@ -3,7 +3,7 @@
   import { onMount } from "svelte";
   import { SUPABASE_URL, SUPABASE_ANON_KEY } from "../lib/env";
 
-  export let redirectTo: string = `${window.location.origin}/beta`;
+  export let redirectTo: string = typeof window !== "undefined" ? `${window.location.origin}/beta` : "";
   export let compact: boolean = false;
 
   let supabase: SupabaseClient;

@@ -70,7 +70,7 @@
     }
   }
 
-  async function createBetaSignup(userId: string, userEmail: string | null) {
+  async function createBetaSignup(userId: string, userEmail: string | null | undefined) {
     const { error } = await supabase
       .from("beta_signups")
       .insert({ user_id: userId, email: userEmail })
@@ -140,7 +140,7 @@
 
   {:else}
     <form on:submit={handleSubmit}>
-      <OAuthButtons redirectTo={`${window.location.origin}/beta`} />
+      <OAuthButtons redirectTo={typeof window !== "undefined" ? `${window.location.origin}/beta` : ""} />
       <div class="divider"><span>or continue with email</span></div>
       <div class="row">
         <input
