@@ -1,0 +1,22 @@
+---
+// Redirect /oauth/consent → /auth/oauth/consent
+// MLflow's Supabase OIDC flow sends users here with ?authorization_id=xxx
+// The consent page lives at /auth/oauth/consent in the Astro routing.
+// Since output is static, we use a meta redirect (works without server).
+---
+<html>
+  <head>
+    <meta http-equiv="refresh" content="0;url=/auth/oauth/consent" />
+    <link rel="canonical" href="/auth/oauth/consent" />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>Redirecting to consent page… <a href="/auth/oauth/consent">Click here if not redirected.</a></p>
+    <script>
+      // Preserve query params (like authorization_id) through the redirect
+      const target = new URL("/auth/oauth/consent", window.location.origin);
+      target.search = window.location.search;
+      window.location.replace(target.toString());
+    </script>
+  </body>
+</html>

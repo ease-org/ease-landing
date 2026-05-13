@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/oauth/consent",
+      "destination": "/auth/oauth/consent",
+      "statusCode": 301
+    }
+  ]
+}
