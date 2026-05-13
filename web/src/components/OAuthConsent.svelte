@@ -7,11 +7,19 @@
   type ViewState = "loading" | "login" | "consent" | "submitting" | "link-sent" | "error";
 
   type AuthorizationDetails = {
+    authorization_id?: string;
     client: {
+      id?: string;
       name?: string;
+      uri?: string;
+      logo_uri?: string;
     };
     redirect_uri?: string;
     scope?: string;
+    user?: {
+      id?: string;
+      email?: string;
+    };
   };
 
   let supabase: SupabaseClient;
@@ -85,6 +93,14 @@
     const { data, error } = await oauth.getAuthorizationDetails(authorizationId);
     if (error || !data) {
       throw new Error(error?.message ?? "Could not load authorization details.");
+    }
+
+    // getAuthorizationDetails returns either OAuthAuthorizationDetails (user must consent)
+    // or OAuthRedirect (user already consented — redirect immediately)
+    if ('redirect_url' in data) {
+      // Already consented — redirect without showing consent UI
+      window.location.href = data.redirect_url;
+      return;
     }
 
     authDetails = data;
