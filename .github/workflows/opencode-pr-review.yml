@@ -1,0 +1,122 @@
+# =============================================================================
+# opencode-pr-review.yml
+# Organization-wide PR review pipeline using OpenCode + MiniMax
+# =============================================================================
+# HOW TO USE:
+#   Option A (recommended for ease-org): Place this file in your
+#     organization .github repository (github.com/ease-org/.github) so it's
+#     automatically available to all repos without copying.
+#   Option B: Copy this file to .github/workflows/ in any repo that opts in.
+#
+# SECRET REQUIRED (org-level Actions secret):
+#   MINIMAX_API_KEY — set in GitHub org settings > Secrets and Variables > Actions
+# =============================================================================
+
+name: opencode-pr-review
+
+on:
+  # Triggered when a developer mentions /oc or /opencode in a PR comment
+  pull_request_review_comment:
+    types: [created]
+
+  # Triggered on PR open — for explicit /oc review requests on new PRs
+  pull_request:
+    types: [opened]
+
+  # Also allow /oc mentions on issues (useful for PR-related questions)
+  issue_comment:
+    types: [created]
+
+  # Scheduled sweep — nightly audit for PRs needing review.
+  # Runs every day at 07:00 UTC. Use /oc in any PR to opt-in for that PR.
+  schedule:
+    - cron: "0 7 * * *"
+
+  # Manual trigger from Actions tab
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: "Custom review prompt (overrides default)"
+        required: false
+        default: ""
+      pr_number:
+        description: "PR number to review (for manual trigger, skips event context)"
+        required: false
+        default: ""
+
+env:
+  # Shared prompt used when no custom prompt is provided
+  DEFAULT_PROMPT: |
+    Review this pull request thoroughly:
+    - Check for code quality issues and anti-patterns
+    - Identify potential bugs or logic errors
+    - Suggest concrete improvements with code examples where helpful
+    - Verify adequate test coverage
+    - Flag any security concerns (injection, secrets, auth issues)
+    - Comment each finding directly on the relevant line or file using the PR review comment interface
+
+jobs:
+  review:
+    if: |
+      (
+        github.event.comment &&
+        (
+          contains(github.event.comment.body, ' /oc') ||
+          startsWith(github.event.comment.body, '/oc') ||
+          contains(github.event.comment.body, ' /opencode') ||
+          startsWith(github.event.comment.body, '/opencode')
+        )
+      ) ||
+      github.event_name == 'pull_request' ||
+      github.event_name == 'schedule' ||
+      github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write          # For OIDC/GitHub app token generation
+      contents: read           # Read repo contents to perform review
+      pull-requests: write     # Post review comments and ratings
+      issues: write           # Create follow-up issues if requested
+
+    steps:
+      # ------------------------------------------------------------------
+      # 1. Checkout with minimal footprint
+      # ------------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1                      # Shallow clone — PR diff is enough
+          persist-credentials: false          # Don't persist credentials in runner
+
+      # ------------------------------------------------------------------
+      # 2. Run OpenCode PR review via the official GitHub Action
+      # ------------------------------------------------------------------
+      - name: Run OpenCode Review
+        uses: anomalyco/opencode/github@latest
+        env:
+          MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
+        with:
+          # Model format: minimax/<model-name> — e.g. minimax/M2.1
+          model: minimax/MiniMax-M2.7
+
+          # Optional: specify a custom agent profile for specialized review.
+          # Uncomment and set to a profile name matching your AGENTS.md.
+          agent: opencode-reviewer
+
+          # Build the prompt: custom input > event context > default
+          prompt: |
+            ${{ inputs.prompt || env.DEFAULT_PROMPT }}
+
+          # Share is disabled for security — review data stays in your runner
+          # (Override per-run via workflow_dispatch if needed)
+          # share: false
+
+      # ------------------------------------------------------------------
+      # 3. Post a workflow summary with cost/token stats
+      # ------------------------------------------------------------------
+      - name: Post workflow summary
+        if: always()
+        run: |
+          echo "## OpenCode PR Review Run" >> $GITHUB_STEP_SUMMARY
+          echo "- Trigger: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Run ID: ${{ github.run_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Timestamp: $(date -u '+%Y-%m-%dT%H:%M:%SZ')" >> $GITHUB_STEP_SUMMARY
