@@ -1,0 +1,61 @@
+name: gortex-refresh
+
+# Keep the centralized Gortex code-intelligence graph (ease-vm) fresh on every merge.
+#
+# Self-contained per-repo workflow — ease-org is free-tier, so there are no org-level or
+# cross-repo reusable workflows; this is distributed into each repo's .github/workflows/ by
+# scripts/bootstrap-workflows.sh, exactly like the other pipeline workflows.
+#
+# Runs on the ease-vm self-hosted runner (ease-deployment roles/gortex-runner), which sits
+# next to the Gortex daemon and its working copies at /opt/gortex/repos. On a push to the
+# default branch it hard-syncs that repo's working copy to the pushed commit; the daemon
+# (gortex mcp --server --watch) reindexes the change atomically, and `gortex enrich all`
+# refreshes git-derived metadata. A brand-new repo is auto-cloned + tracked on first run.
+
+on:
+  push:
+    branches: [main, master]
+
+concurrency:
+  group: gortex-refresh-${{ github.repository }}
+  cancel-in-progress: false   # serialize per repo; never cancel an in-flight reindex
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: [self-hosted, ease-vm]
+    steps:
+      - name: Sync working copy and refresh the graph
+        # Uses the automatic GITHUB_TOKEN — it can read the triggering repo (contents: read),
+        # which is all we fetch here. No per-repo App secret needed, so this runs in any repo.
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO_FULL: ${{ github.repository }}
+          REPO: ${{ github.event.repository.name }}
+          SHA: ${{ github.sha }}
+          REF_NAME: ${{ github.ref_name }}
+          REPOS_DIR: /opt/gortex/repos
+        run: |
+          set -euo pipefail
+          DIR="$REPOS_DIR/$REPO"
+          AUTH_HDR="Authorization: Basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 | tr -d '\n')"
+          mkdir -p "$REPOS_DIR"
+          if [ ! -d "$DIR/.git" ]; then
+            echo "First sight of $REPO — cloning + tracking"
+            git -c http.extraheader="$AUTH_HDR" clone --no-tags "https://github.com/${REPO_FULL}.git" "$DIR"
+            gortex track "$DIR" || true
+            gortex daemon reload || true
+          fi
+          # Drop any token baked into the remote URL; auth is supplied per-call via extraheader.
+          git -C "$DIR" remote set-url origin "https://github.com/${REPO_FULL}.git"
+          git -C "$DIR" -c http.extraheader="$AUTH_HDR" fetch --prune --no-tags origin "$REF_NAME"
+          git -C "$DIR" reset --hard "$SHA"
+          echo "Synced $REPO to $SHA on $REF_NAME"
+          # The daemon's --watch reindexes the structural change atomically; refresh the
+          # git-derived metadata (blame / churn / co-change) against the warm graph.
+          if ! gortex enrich all; then
+            echo "::warning::gortex enrich failed (daemon down?) — structural index still updated by --watch"
+          fi
+          gortex status || true
