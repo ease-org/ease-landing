@@ -30,3 +30,13 @@ npm-debug.log*
 *.swo
 .vercel
 .env*.local
+
+# Playwright e2e artifacts
+playwright-report/
+test-results/
+.playwright/
+blob-report/
+web/playwright-report/
+web/test-results/
+web/.playwright/
+web/blob-report/

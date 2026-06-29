@@ -1,1 +1,7 @@
 .vercel
+
+# Playwright e2e artifacts
+playwright-report/
+test-results/
+.playwright/
+blob-report/
