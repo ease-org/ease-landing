@@ -11,12 +11,22 @@ import NavCta from "../components/NavCta.svelte";
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ease — Migraine Tracking</title>
     <meta name="description" content="Track migraine attacks, identify triggers, and discover personalized insights that help you live better. Join the private beta." />
+    <meta name="theme-color" content="#1B1B2F" />
+    <!-- Social sharing (og:image still TODO — needs a real 1200×630 asset in /public) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Ease — Migraine Tracking" />
+    <meta property="og:description" content="Track migraine attacks, identify triggers, and get personalized insights — kept completely private. Join the beta." />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Ease — Migraine Tracking" />
+    <meta name="twitter:description" content="Track migraine attacks, identify triggers, and get personalized insights — kept completely private. Join the beta." />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
   </head>
   <body>
+
+    <a class="skip-link" href="#main">Skip to content</a>
 
     <!-- ░░ ATMOSPHERIC DEPTH ░░ -->
     <div class="atmosphere" aria-hidden="true">
@@ -44,6 +54,8 @@ import NavCta from "../components/NavCta.svelte";
         </nav>
       </div>
     </header>
+
+    <main id="main">
 
     <!-- ░░ HERO ░░ -->
     <section class="hero">
@@ -78,7 +90,7 @@ import NavCta from "../components/NavCta.svelte";
             <div class="card-icon icon-purple">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             </div>
-            <h3>Continuous Monitoring</h3>
+            <h3>Continuous monitoring</h3>
             <p>Log attacks as they happen with quick-entry flows designed for when you're in pain.</p>
           </article>
 
@@ -86,7 +98,7 @@ import NavCta from "../components/NavCta.svelte";
             <div class="card-icon icon-orange">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
             </div>
-            <h3>Early Onset Detection</h3>
+            <h3>Early onset detection</h3>
             <p>Spot prodrome symptoms early and take action before a full attack sets in.</p>
           </article>
 
@@ -94,7 +106,7 @@ import NavCta from "../components/NavCta.svelte";
             <div class="card-icon icon-green">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
-            <h3>Privacy First</h3>
+            <h3>Privacy first</h3>
             <p>Your health data stays on your device. We never sell or share what you track.</p>
           </article>
 
@@ -103,14 +115,14 @@ import NavCta from "../components/NavCta.svelte";
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             </div>
             <h3>Apple HealthKit</h3>
-            <p>Sync seamlessly with Apple Health to enrich your data with sleep, activity, and vitals.</p>
+            <p>Connects to Apple Health to bring in your sleep, activity, and vitals automatically.</p>
           </article>
 
           <article class="card reveal" style="--d:240ms">
             <div class="card-icon icon-orange">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
             </div>
-            <h3>Personalized Insights</h3>
+            <h3>Personalized insights</h3>
             <p>Discover your unique trigger patterns with AI-powered analysis of your history.</p>
           </article>
 
@@ -118,7 +130,7 @@ import NavCta from "../components/NavCta.svelte";
             <div class="card-icon icon-green">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             </div>
-            <h3>Daily Journaling</h3>
+            <h3>Daily journaling</h3>
             <p>Simple check-ins build a full picture of your health, helping correlate how you feel.</p>
           </article>
 
@@ -274,6 +286,8 @@ import NavCta from "../components/NavCta.svelte";
       </div>
     </section>
 
+    </main>
+
     <!-- ░░ FOOTER ░░ -->
     <footer class="footer">
       <div class="container">
@@ -303,17 +317,20 @@ import NavCta from "../components/NavCta.svelte";
       );
       document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
-      // ── Card 3D tilt ───────────────────────────────────────
-      document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
-        card.addEventListener('mousemove', (ev) => {
-          const r = card.getBoundingClientRect();
-          const x = ev.clientX - r.left, y = ev.clientY - r.top;
-          const cx = r.width / 2, cy = r.height / 2;
-          card.style.transform =
-            `perspective(520px) rotateX(${((y - cy) / cy) * -5}deg) rotateY(${((x - cx) / cx) * 5}deg) translateY(-4px)`;
+      // ── Card 3D tilt (skipped for motion-sensitive users) ──
+      const allowMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+      if (allowMotion) {
+        document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+          card.addEventListener('mousemove', (ev) => {
+            const r = card.getBoundingClientRect();
+            const x = ev.clientX - r.left, y = ev.clientY - r.top;
+            const cx = r.width / 2, cy = r.height / 2;
+            card.style.transform =
+              `perspective(520px) rotateX(${((y - cy) / cy) * -5}deg) rotateY(${((x - cx) / cx) * 5}deg) translateY(-4px)`;
+          });
+          card.addEventListener('mouseleave', () => { card.style.transform = ''; });
         });
-        card.addEventListener('mouseleave', () => { card.style.transform = ''; });
-      });
+      }
     </script>
 
   </body>
@@ -429,6 +446,30 @@ import NavCta from "../components/NavCta.svelte";
   }
   .text-muted { color: var(--muted); }
 
+  /* ── Accessibility ────────────────────────────────────────── */
+  .skip-link {
+    position: absolute;
+    left: 16px;
+    top: -56px;
+    z-index: 200;
+    padding: 9px 16px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-h);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: top 0.2s ease;
+  }
+  .skip-link:focus { top: 16px; }
+
+  :where(a, button, input, [tabindex]):focus-visible {
+    outline: 2px solid var(--purple-p);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
   /* Scroll reveal */
   .reveal {
     opacity: 0;
@@ -483,6 +524,7 @@ import NavCta from "../components/NavCta.svelte";
     transition: color 0.2s;
   }
   .nav nav a:hover { color: var(--text); }
+  .nav nav a:active { transform: translateY(1px); }
   .nav-cta {
     padding: 7px 15px !important;
     background: var(--surface-2) !important;
@@ -542,13 +584,25 @@ import NavCta from "../components/NavCta.svelte";
     letter-spacing: -0.035em;
     color: var(--text);
     margin-bottom: 20px;
+    text-wrap: balance;
   }
+  /* Solid accent + considered underline instead of the generic gradient-text fill */
   .hero-title em {
     font-style: normal;
-    background: linear-gradient(125deg, var(--purple-l) 0%, var(--purple-p) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--purple-p);
+    position: relative;
+    white-space: nowrap;
+  }
+  .hero-title em::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.06em;
+    height: 0.085em;
+    background: var(--purple);
+    opacity: 0.55;
+    border-radius: 2px;
   }
   .hero-sub {
     font-size: 17px;
@@ -572,12 +626,21 @@ import NavCta from "../components/NavCta.svelte";
     font-weight: 800;
     letter-spacing: -0.03em;
     line-height: 1.15;
+    text-wrap: balance;
   }
   .features-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: 1fr;
     gap: 14px;
   }
+  /* Asymmetric bento rhythm: 4·2 / 2·4 / 3·3 — breaks the generic 3-up row */
+  .features-grid .card:nth-child(1) { grid-column: span 4; }
+  .features-grid .card:nth-child(2) { grid-column: span 2; }
+  .features-grid .card:nth-child(3) { grid-column: span 2; }
+  .features-grid .card:nth-child(4) { grid-column: span 4; }
+  .features-grid .card:nth-child(5) { grid-column: span 3; }
+  .features-grid .card:nth-child(6) { grid-column: span 3; }
   .card {
     padding: 28px 24px;
     background: var(--surface);
@@ -585,7 +648,7 @@ import NavCta from "../components/NavCta.svelte";
     border-radius: var(--radius);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 4px 28px rgba(0,0,0,0.22);
+    box-shadow: 0 4px 28px rgba(10,8,24,0.45);
     transition: background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.15s ease-out;
     cursor: default;
     will-change: transform;
@@ -593,8 +656,9 @@ import NavCta from "../components/NavCta.svelte";
   .card:hover {
     background: var(--surface-h);
     border-color: var(--border-h);
-    box-shadow: 0 8px 44px rgba(0,0,0,0.38), 0 0 0 1px rgba(108,99,172,0.12);
+    box-shadow: 0 8px 44px rgba(10,8,24,0.6), 0 0 0 1px rgba(108,99,172,0.12);
   }
+  .card:active { transform: translateY(-1px) scale(0.995); }
   .card-icon {
     width: 44px; height: 44px;
     border-radius: 12px;
@@ -632,7 +696,7 @@ import NavCta from "../components/NavCta.svelte";
     padding: 52px;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    box-shadow: 0 8px 48px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow: 0 8px 48px rgba(10,8,24,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
     position: relative;
     overflow: hidden;
   }
@@ -671,6 +735,7 @@ import NavCta from "../components/NavCta.svelte";
     font-weight: 800;
     letter-spacing: -0.03em;
     color: var(--text);
+    font-variant-numeric: tabular-nums;
   }
   .stat-l {
     font-size: 9px;
@@ -719,6 +784,7 @@ import NavCta from "../components/NavCta.svelte";
     font-size: 10px;
     font-weight: 500;
     color: var(--muted);
+    font-variant-numeric: tabular-nums;
   }
   .dot {
     width: 10px; height: 10px;
@@ -808,11 +874,11 @@ import NavCta from "../components/NavCta.svelte";
 
   .rm-badge {
     display: inline-block;
-    padding: 3px 9px;
-    border-radius: 20px;
+    padding: 3px 8px;
+    border-radius: 4px;
     font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
   .badge-green  { background: rgba(107,143,113,0.15); border: 1px solid rgba(107,143,113,0.3);  color: var(--green-t); }
@@ -905,6 +971,7 @@ import NavCta from "../components/NavCta.svelte";
   /* ── Responsive ───────────────────────────────────────────── */
   @media (max-width: 920px) {
     .features-grid { grid-template-columns: repeat(2, 1fr); }
+    .features-grid .card { grid-column: auto !important; }
     .philosophy { flex-direction: column; gap: 36px; padding: 36px; }
     .philosophy-vis { align-self: flex-start; }
   }
@@ -917,5 +984,20 @@ import NavCta from "../components/NavCta.svelte";
     .philosophy { padding: 24px; }
     .footer-row { flex-direction: column; gap: 10px; text-align: center; }
     .section { padding: 72px 0; }
+  }
+
+  /* ── Reduced motion ───────────────────────────────────────── */
+  /* Migraine-sensitive users are often motion- and light-sensitive,
+     so honor the OS preference and quiet everything down. */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1 !important; transform: none !important; }
+    .orb { animation: none !important; }
+    .dot { animation: none !important; opacity: 0.85 !important; }
   }
 </style>
