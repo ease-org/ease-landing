@@ -1,0 +1,12 @@
+{
+  "name": "ease",
+  "short_name": "ease",
+  "start_url": "/trial/app/",
+  "scope": "/trial/app/",
+  "display": "standalone",
+  "background_color": "#1b1610",
+  "theme_color": "#1b1610",
+  "icons": [
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
