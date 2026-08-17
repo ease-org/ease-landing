@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1b1610">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ease">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>ease</title>
+<style>
+  :root{
+    --ground:#1b1610;--deep:#0c0906;--card:#241d15;--card2:#2b2318;--line:#322a1e;
+    --ink:#f3ebe0;--ink2:#b3a48f;--ink3:#8a7c69;
+    --apricot:#f0a35c;--apricot-dim:#8a5f38;--on-apricot:#241503;--on-apricot-dim:#ffe0bb;
+    --coral:#e2695b;--coral-dim:#5c3029;--on-coral:#f4b0a6;
+    --sage:#9db58a;--sage-dim:#39402f;--on-sage:#c4d4b4;
+    --ls-ink:#c9b797;--ls-ink2:#8a734f;--ls-ink3:#57492f;--ls-card:#241b0f;--ls-line:#3a2d1a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  html,body{height:100%;overscroll-behavior:none}
+  body{
+    background:var(--ground);color:var(--ink);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;user-select:none;-webkit-user-select:none;
+  }
+  /* interaction grammar: flat card = info · border+chevron = tappable · apricot = primary · underline = link */
+  .screen{
+    display:none;min-height:100dvh;
+    padding:calc(14px + env(safe-area-inset-top)) 16px calc(96px + env(safe-area-inset-bottom));
+  }
+  .screen.on{display:block}
+  .eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ink3)}
+  .eyebrow.hi{color:var(--apricot)}
+  h1{font-size:27px;font-weight:650;letter-spacing:-.015em;margin-top:2px}
+  .sub{color:var(--ink2);font-size:15px;margin-top:2px}
+  .card{background:var(--card);border-radius:18px;padding:16px;margin-top:12px}
+  .rowsb{display:flex;justify-content:space-between;align-items:center}
+  .chip{font-family:ui-monospace,Menlo,monospace;font-size:10px;letter-spacing:.12em;font-weight:600;
+    padding:4px 10px;border-radius:999px;background:var(--card2);color:var(--ink2)}
+  .chip.cur{background:var(--apricot-dim);color:var(--on-apricot-dim)}
+  .tap{background:var(--card2);border:1px solid var(--apricot-dim);border-radius:18px;
+    padding:15px 12px 15px 16px;margin-top:12px;display:flex;align-items:center;gap:10px;
+    color:var(--ink);cursor:pointer;min-height:56px}
+  .tap .body{flex:1}
+  .tap .chev{color:var(--apricot);font-size:24px;font-weight:500}
+  .link{color:var(--ink2);text-decoration:underline;font-size:15px;display:inline-block;
+    padding:12px 0;cursor:pointer}
+  button.primary{width:100%;background:var(--apricot);color:var(--on-apricot);border:0;
+    border-radius:16px;padding:17px;font-size:17px;font-weight:650;margin-top:12px;cursor:pointer}
+
+  /* header row */
+  .head{display:flex;align-items:center;gap:12px}
+  .head>div:first-child{flex:1}
+  .lowstim-chip{border:1px solid var(--apricot-dim);border-radius:999px;padding:12px 16px;
+    font-size:14px;color:var(--ink);cursor:pointer;white-space:nowrap}
+
+  /* calendar */
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:10px}
+  .cal .wd{text-align:center;font-family:ui-monospace,Menlo,monospace;font-size:10px;color:var(--ink3)}
+  .cal span{height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;
+    font-size:12.5px;color:var(--ink2);background:var(--card2);font-variant-numeric:tabular-nums}
+  .cal .blank{background:none}
+  .cal .atk{background:var(--coral-dim);color:var(--on-coral)}
+  .cal .clr{background:var(--sage-dim);color:var(--on-sage)}
+  .cal .tdy{outline:1.5px solid var(--apricot);outline-offset:1px;color:var(--ink)}
+  .cal .fut{background:none;color:var(--ink3)}
+  .legend{display:flex;gap:16px;margin-top:12px;font-size:12.5px;color:var(--ink2)}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+
+  /* switch */
+  .switch{position:relative;width:52px;height:32px;flex:none}
+  .switch input{opacity:0;width:100%;height:100%;position:absolute;z-index:2;cursor:pointer;margin:0}
+  .switch .track{position:absolute;inset:0;border-radius:999px;background:var(--card2);transition:background .15s}
+  .switch .thumb{position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;
+    background:var(--ink3);transition:all .15s}
+  .switch input:checked ~ .track{background:var(--apricot-dim)}
+  .switch input:checked ~ .thumb{left:24px;background:var(--apricot)}
+  .switch.off .track{opacity:.5}
+
+  hr{border:0;border-top:1px solid var(--line);margin:12px 0}
+
+  /* timeline */
+  .step{display:flex;gap:12px}
+  .rail{width:14px;display:flex;flex-direction:column;align-items:center;flex:none}
+  .node{width:12px;height:12px;border-radius:50%;background:var(--card2);border:2px solid var(--ink2);margin-top:5px;flex:none}
+  .node.cur{background:var(--apricot);border-color:var(--apricot);box-shadow:0 0 0 4px rgba(240,163,92,.15)}
+  .node.plan{border-color:var(--ink3)}
+  .railline{width:2px;flex:1;background:var(--line)}
+  .step .sbody{flex:1;padding-bottom:18px}
+  .step .sbody.cur{background:var(--card);border-radius:14px;padding:12px 14px;margin-bottom:18px}
+  .med{font-size:16px;font-weight:650}
+  .dim{color:var(--ink2);font-size:13.5px;margin-top:2px}
+
+  /* kpis */
+  .kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .kpi{background:var(--card);border-radius:16px;padding:14px}
+  .kpi b{font-size:26px;font-weight:650}
+  .kpi span{display:block;color:var(--ink2);font-size:12.5px;line-height:1.35;margin-top:2px}
+
+  /* nav */
+  nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);
+    background:var(--card2);border-top:1px solid var(--line);
+    padding:8px 8px calc(8px + env(safe-area-inset-bottom));z-index:20}
+  nav div{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--ink3);
+    font-size:12px;cursor:pointer;padding:4px 0;min-height:48px;justify-content:center}
+  nav div.on{color:var(--ink)}
+  nav div .pill{padding:2px 14px;border-radius:12px;line-height:1}
+  nav div.on .pill{background:var(--apricot-dim)}
+  nav svg{display:block}
+
+  /* fab */
+  #fab{position:fixed;right:18px;bottom:calc(84px + env(safe-area-inset-bottom));width:56px;height:56px;
+    border-radius:18px;background:var(--apricot);color:var(--on-apricot);font-size:30px;font-weight:400;
+    display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(240,163,92,.3);
+    cursor:pointer;z-index:20}
+
+  /* sheet */
+  #scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:30;display:none}
+  #sheet{position:fixed;left:0;right:0;bottom:0;background:var(--card2);border-radius:24px 24px 0 0;
+    padding:10px 20px calc(24px + env(safe-area-inset-bottom));z-index:31;display:none}
+  #sheet .handle{width:40px;height:4px;border-radius:2px;background:var(--line);margin:6px auto 14px}
+  #sheet h2{font-size:19px;font-weight:650;margin-bottom:12px}
+  #sheet .tap{background:var(--card)}
+
+  /* overlays */
+  .overlay{position:fixed;inset:0;background:var(--ground);z-index:40;display:none;
+    padding:calc(20px + env(safe-area-inset-top)) 20px calc(20px + env(safe-area-inset-bottom));
+    flex-direction:column;justify-content:center}
+  .overlay.on{display:flex}
+  #lowstim{background:var(--deep)}
+  .progress{display:flex;gap:6px;margin:10px 0 16px}
+  .progress i{width:26px;height:5px;border-radius:2.5px;background:var(--line)}
+  .progress i.on{background:var(--apricot)}
+  .q{font-size:29px;font-weight:650;line-height:1.2}
+  .opt{background:var(--card2);border:1px solid var(--apricot-dim);border-radius:16px;padding:17px 18px;
+    font-size:18px;font-weight:650;margin-top:10px;cursor:pointer;min-height:56px}
+  .opt.sage{background:var(--sage-dim);color:var(--on-sage);border-color:transparent}
+  .opt.acc{background:var(--apricot-dim);color:var(--on-apricot-dim);border-color:transparent}
+  .note{color:var(--ink2);font-size:13.5px;margin-top:14px}
+
+  /* low-stim */
+  .ls-eyebrow{font-family:ui-monospace,Menlo,monospace;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ls-ink2)}
+  .ls-h{color:var(--ls-ink);font-size:24px;font-weight:550;margin-top:12px}
+  .ls-sub{color:var(--ls-ink2);font-size:15px;margin-top:4px}
+  .ls-btn{background:var(--ls-card);border:1px solid var(--ls-line);border-radius:20px;padding:22px;
+    text-align:center;margin-top:14px;cursor:pointer}
+  .ls-btn b{color:#e8cba0;font-size:19px;font-weight:650;display:block}
+  .ls-btn span{color:var(--ls-ink2);font-size:13px}
+  .ls-btn.ghost{background:none}
+  .ls-btn.ghost b{color:var(--ls-ink);font-size:16px;font-weight:550}
+  .ls-link{color:var(--ls-ink2);text-decoration:underline;font-size:15px;text-align:center;
+    margin-top:18px;cursor:pointer}
+
+  /* toast */
+  #toast{position:fixed;left:16px;right:16px;bottom:calc(96px + env(safe-area-inset-bottom));
+    background:var(--card2);border:1px solid var(--apricot-dim);border-radius:14px;color:var(--ink);
+    font-size:14.5px;padding:14px 16px;z-index:50;display:none}
+
+  /* gate */
+  #gate{justify-content:center}
+  #gate input{width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+    color:var(--ink);font:600 19px/1 ui-monospace,Menlo,monospace;letter-spacing:.1em;padding:16px;
+    text-transform:uppercase;outline:none;margin-top:20px}
+  #gate input:focus{border-color:var(--apricot)}
+  #gate .msg{color:var(--coral);font-size:14px;margin-top:10px;min-height:1.3em}
+</style>
+</head>
+<body>
+
+<!-- ================= gate ================= -->
+<div class="overlay on" id="gate">
+  <p class="eyebrow hi">ease · closed trial</p>
+  <h1 style="font-size:30px;margin-top:8px">Enter your trial key.</h1>
+  <p class="sub">You got it from the ease team.</p>
+  <input id="gkey" placeholder="EASE-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
+  <p class="msg" id="gmsg"></p>
+  <button class="primary" id="gbtn">Unlock</button>
+  <p class="note">Demo data only — the trial stores your key and the events you log, nothing else.</p>
+</div>
+
+<!-- ================= today ================= -->
+<div class="screen" id="s-today">
+  <div class="head">
+    <div>
+      <p class="eyebrow" id="today-date">MONDAY · 17 AUG</p>
+      <h1>Quiet so far.</h1>
+    </div>
+    <div class="lowstim-chip" onclick="enterLowStim('chip')">☾&nbsp; Low-stim</div>
+  </div>
+
+  <div class="card">
+    <div class="rowsb"><span class="eyebrow">August</span><span class="eyebrow hi">4 attack · 11 clear</span></div>
+    <div class="cal" id="cal"></div>
+    <div class="legend">
+      <span><i style="background:var(--coral-dim)"></i>attack</span>
+      <span><i style="background:var(--sage-dim)"></i>clear</span>
+      <span><i style="background:var(--card2)"></i>not logged</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="rowsb"><span class="eyebrow">Current trial</span><span class="chip cur">CURRENT</span></div>
+    <p class="med" style="font-size:19px;margin-top:8px">Sumatriptan 100 mg</p>
+    <p class="dim" style="font-size:14px">Since 28 Jul · 100 mg at onset</p>
+    <p class="dim" style="font-size:14px">Plan: max 2/week · review 15 Sep</p>
+    <hr>
+    <div class="rowsb">
+      <span style="font-size:15px;font-weight:550">2-hour reminder</span>
+      <label class="switch"><input type="checkbox" checked><span class="track"></span><span class="thumb"></span></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">Acute medication</p>
+    <p style="margin-top:6px"><b style="font-size:30px;font-weight:650">5</b>
+      <span style="color:var(--ink2);font-size:15px">&nbsp;days in August</span></p>
+    <p class="dim" style="font-size:13px">Count only — goes into your report.</p>
+  </div>
+</div>
+
+<!-- ================= timeline ================= -->
+<div class="screen" id="s-timeline">
+  <h1>Timeline</h1>
+  <p class="sub">Plan agreed with Dr. Mäkelä</p>
+  <div style="margin-top:20px" id="tl"></div>
+  <p class="dim" style="margin-left:26px">Records only — no scoring, no recommendations.</p>
+</div>
+
+<!-- ================= report ================= -->
+<div class="screen" id="s-report">
+  <p class="eyebrow">Appointment report</p>
+  <h1>For your next visit.</h1>
+  <div class="kpis">
+    <div class="kpi"><b>11</b><span>migraine days · 4 wks</span></div>
+    <div class="kpi"><b>5</b><span>acute-med days · Aug</span></div>
+  </div>
+  <div class="card">
+    <p class="eyebrow">Medication trials</p>
+    <div style="margin-top:8px">
+      <p class="med">Ibuprofen 600</p><p class="dim">02 May – 12 Jun · No relief at 2 h</p><hr>
+      <p class="med">Zolmitriptan 5</p><p class="dim">14 Jun – 28 Jul · Dizziness</p><hr>
+      <p class="med">Sumatriptan 100</p><p class="dim">since 28 Jul · ongoing</p>
+    </div>
+  </div>
+  <div class="card"><p class="eyebrow">PRO trend</p>
+    <p style="font-size:15px;margin-top:4px">HIT-6: 63 → 58 · monthly</p></div>
+  <div class="card"><p class="eyebrow">Missing data</p>
+    <p style="font-size:15px;margin-top:4px;line-height:1.4">12 of 84 events missing — shown as gaps, never estimated.</p></div>
+  <button class="primary" onclick="toast('Report export is a stub in this demo.')">Export report</button>
+</div>
+
+<!-- ================= research ================= -->
+<div class="screen" id="s-research">
+  <p class="eyebrow">Separate from core use</p>
+  <h1>Research.</h1>
+  <div class="card">
+    <p style="font-size:15px;line-height:1.5">Your record works fully without research. Enrolling never changes what you see.</p>
+  </div>
+  <div class="card">
+    <div class="rowsb">
+      <div><p style="font-size:16px;font-weight:550">Join the study</p>
+        <p class="dim" style="font-size:13px">Separate consent · withdraw any time</p></div>
+      <label class="switch"><input type="checkbox" id="enroll"><span class="track"></span><span class="thumb"></span></label>
+    </div>
+    <hr>
+    <div class="rowsb">
+      <div><p style="font-size:16px;font-weight:550" id="passive-t">Share HRV &amp; sleep</p>
+        <p class="dim" style="font-size:13px" id="passive-s">Needs study enrollment</p></div>
+      <label class="switch off" id="passive-w"><input type="checkbox" id="passive" disabled><span class="track"></span><span class="thumb"></span></label>
+    </div>
+  </div>
+  <div class="card">
+    <p class="eyebrow">The study never</p>
+    <p style="font-size:15px;margin-top:8px;line-height:1.9">
+      •&nbsp; Shows you predictions<br>
+      •&nbsp; Touches your report<br>
+      •&nbsp; Shares individual data with employers<br>
+      •&nbsp; Sells your data</p>
+  </div>
+</div>
+
+<!-- ================= nav + fab ================= -->
+<div id="fab" onclick="openSheet()">+</div>
+<nav id="nav"></nav>
+
+<!-- ================= sheet ================= -->
+<div id="scrim" onclick="closeSheet()"></div>
+<div id="sheet">
+  <div class="handle"></div>
+  <h2>Log</h2>
+  <div class="tap" onclick="logDose('sheet')"><div class="body"><b style="font-size:16px">Log dose</b>
+    <p class="dim" style="font-size:12.5px">sumatriptan 100 mg · schedules the 2 h check-in</p></div><div class="chev">›</div></div>
+  <div class="tap" onclick="closeSheet();openOutcome()"><div class="body"><b style="font-size:16px">Record outcome now</b>
+    <p class="dim" style="font-size:12.5px">the three-tap outcome event</p></div><div class="chev">›</div></div>
+  <div class="tap" onclick="closeSheet();enterLowStim('sheet')"><div class="body"><b style="font-size:16px">Log attack</b>
+    <p class="dim" style="font-size:12.5px">opens low-stimulation capture</p></div><div class="chev">›</div></div>
+</div>
+
+<!-- ================= outcome overlay ================= -->
+<div class="overlay" id="outcome">
+  <p class="eyebrow">Sumatriptan · dose <span id="dosetime">14:32</span></p>
+  <div class="progress"><i id="p0"></i><i id="p1"></i><i id="p2"></i></div>
+  <div id="ostep"></div>
+  <p class="note" id="onote"></p>
+  <p class="link" style="text-align:center" onclick="closeOutcome(true)">Not now — ask me tonight</p>
+</div>
+
+<!-- ================= low-stim overlay ================= -->
+<div class="overlay" id="lowstim">
+  <p class="ls-eyebrow">Low-stim · on</p>
+  <p class="ls-h" id="ls-time">Attack logged, 19:48.</p>
+  <p class="ls-sub">Everything else can wait.</p>
+  <div class="ls-btn" onclick="logDose('low_stim');exitLowStim()"><b>Log dose</b><span>Sumatriptan 100 mg · per plan</span></div>
+  <div class="ls-btn ghost" onclick="voiceStub()"><b>●&nbsp; Speak instead</b><span>eyes closed is fine</span></div>
+  <p class="ls-link" onclick="exitLowStim()">exit low-stim</p>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const SB="https://yolwyazckiqdjhepjiex.supabase.co";
+const ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbHd5YXpja2lxZGpoZXBqaWV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDM3MDcsImV4cCI6MjEwMjUxOTcwN30.KpJWaelY1zenLyVZEHxNEhktNPUvQnneBEI6mYqXQVs";
+const KEYNAME="ease_trial_key";
+const $=id=>document.getElementById(id);
+let eventCount=9;
+
+/* ---------- trial-db ---------- */
+async function validate(k){
+  const r=await fetch(SB+"/rest/v1/rpc/validate_trial_key",{method:"POST",
+    headers:{apikey:ANON,Authorization:"Bearer "+ANON,"Content-Type":"application/json"},
+    body:JSON.stringify({k})});
+  if(!r.ok)throw 0;
+  return await r.json()===true;
+}
+function logEvent(kind,payload){
+  const key=localStorage.getItem(KEYNAME);if(!key)return;
+  fetch(SB+"/rest/v1/trial_events",{method:"POST",
+    headers:{apikey:ANON,Authorization:"Bearer "+ANON,"Content-Type":"application/json"},
+    body:JSON.stringify({trial_key:key,platform:"web",kind,payload:payload||{}})}).catch(()=>{});
+}
+
+/* ---------- gate ---------- */
+$("gbtn").addEventListener("click",async()=>{
+  const k=$("gkey").value.trim().toUpperCase();
+  $("gmsg").textContent="";
+  if(k.length<8){$("gmsg").textContent="That key looks too short.";return}
+  $("gbtn").disabled=true;$("gbtn").textContent="Checking…";
+  try{
+    if(await validate(k)){
+      localStorage.setItem(KEYNAME,k);
+      logEvent("gate_unlock",{src:"webapp"});
+      $("gate").classList.remove("on");
+      show("today");
+    }else $("gmsg").textContent="Key not recognized. Check it and try again.";
+  }catch(e){$("gmsg").textContent="No connection — try again in a moment."}
+  $("gbtn").disabled=false;$("gbtn").textContent="Unlock";
+});
+
+/* ---------- navigation ---------- */
+const TABS=[["today","Today"],["timeline","Timeline"],["report","Report"],["research","Research"]];
+const ICONS={
+  today:'<circle cx="8" cy="8" r="3.4"/><path d="M8 1.2v2M8 12.8v2M1.2 8h2M12.8 8h2"/>',
+  timeline:'<path d="M3 13.5L7 9l3 2 3-7.5"/>',
+  report:'<path d="M3 13.5V9M8 13.5V5.5M13 13.5V2.5"/>',
+  research:'<rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2"/>'
+};
+function navHtml(active){
+  return TABS.map(([id,label])=>
+    `<div class="${id===active?"on":""}" onclick="show('${id}')">
+      <span class="pill"><svg width="17" height="17" viewBox="0 0 16 16" fill="none"
+        stroke="${id===active?"#ffe0bb":"#8a7c69"}" stroke-width="1.5">${ICONS[id]}</svg></span>${label}</div>`).join("");
+}
+function show(tab){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on"));
+  $("s-"+tab).classList.add("on");
+  $("nav").innerHTML=navHtml(tab);
+  $("fab").style.display=tab==="today"?"flex":"none";
+  window.scrollTo(0,0);
+}
+
+/* ---------- calendar ---------- */
+(function(){
+  const atk=[3,7,12,17],unlogged=[15],today=17;
+  let h='<span class="wd">M</span><span class="wd">T</span><span class="wd">W</span><span class="wd">T</span><span class="wd">F</span><span class="wd">S</span><span class="wd">S</span>';
+  for(let i=0;i<5;i++)h+='<span class="blank"></span>';
+  for(let d=1;d<=31;d++){
+    let cls=d===today?"tdy":d>today?"fut":atk.includes(d)?"atk":unlogged.includes(d)?"":"clr";
+    h+=`<span class="${cls}">${d}</span>`;
+  }
+  $("cal").innerHTML=h;
+})();
+
+/* ---------- timeline ---------- */
+(function(){
+  const steps=[
+    ["Ibuprofen 600 mg","PAST","02 May – 12 Jun","Stopped: No relief at 2 h"],
+    ["Zolmitriptan 5 mg","PAST","14 Jun – 28 Jul","Stopped: Dizziness"],
+    ["Sumatriptan 100 mg","CURRENT","since 28 Jul","9 outcomes recorded"],
+    ["Rizatriptan 10 mg","PLANNED","not started","If needed — decided at the review"],
+  ];
+  $("tl").innerHTML=steps.map(([name,st,period,line],i)=>{
+    const cur=st==="CURRENT";
+    return `<div class="step">
+      <div class="rail"><div class="node ${cur?"cur":st==="PLANNED"?"plan":""}"></div>
+      ${i<steps.length-1?'<div class="railline"></div>':""}</div>
+      <div class="sbody ${cur?"cur":""}">
+        <div class="rowsb"><span class="med" ${st==="PAST"?'style="color:var(--ink2)"':""}>${name}</span>
+        <span class="chip ${cur?"cur":""}">${st}</span></div>
+        <p class="dim">${period}</p><p class="dim">${line}</p>
+      </div></div>`;
+  }).join("");
+})();
+
+/* ---------- research toggles ---------- */
+$("enroll").addEventListener("change",e=>{
+  const on=e.target.checked;
+  $("passive").disabled=!on;
+  $("passive-w").classList.toggle("off",!on);
+  $("passive-s").textContent=on?"Optional add-on":"Needs study enrollment";
+  if(!on)$("passive").checked=false;
+  if(on)toast("Full study consent flow is a stub in this demo.");
+});
+
+/* ---------- sheet ---------- */
+function openSheet(){$("scrim").style.display="block";$("sheet").style.display="block"}
+function closeSheet(){$("scrim").style.display="none";$("sheet").style.display="none"}
+
+/* ---------- dose + demo check-in ---------- */
+let checkinTimer=null;
+function logDose(via){
+  closeSheet();
+  logEvent("dose",{via});
+  toast("Dose logged. Check-in in 2 h (15 s in this demo).");
+  clearTimeout(checkinTimer);
+  checkinTimer=setTimeout(openOutcome,15000);
+}
+function voiceStub(){logEvent("voice_stub",{});toast("Voice capture is a stub — note saved locally.")}
+
+/* ---------- low-stim ---------- */
+function enterLowStim(via){
+  logEvent("attack",{via});
+  const t=new Date();
+  $("ls-time").textContent=`Attack logged, ${String(t.getHours()).padStart(2,"0")}:${String(t.getMinutes()).padStart(2,"0")}.`;
+  $("lowstim").classList.add("on");
+}
+function exitLowStim(){$("lowstim").classList.remove("on")}
+
+/* ---------- outcome flow ---------- */
+let ostep=0,orelief="";
+const OSTEPS=[
+  {q:"Did you take it?",opts:[["Taken · 14:32","acc",()=>next()],["Taken earlier","",()=>next()],["Not taken","",()=>finish("not taken")]]},
+  {q:"Two hours in — pain-free?",opts:[["Pain-free","sage",()=>{orelief="pain-free";next()}],["Better, not gone","",()=>{orelief="partial relief";next()}],["No change","",()=>{orelief="no change";next()}]]},
+  {q:"How was function?",opts:[["Could work","sage",()=>finish(orelief+", functional")],["Limited","",()=>finish(orelief+", limited")],["Side effects…","",()=>finish(orelief+", side effects noted")]]},
+];
+function renderOutcome(){
+  const s=OSTEPS[ostep];
+  for(let i=0;i<3;i++)$("p"+i).className=i<=ostep?"on":"";
+  $("ostep").innerHTML=`<p class="q">${s.q}</p>`+
+    s.opts.map((o,i)=>`<div class="opt ${o[1]}" data-i="${i}">${o[0]}</div>`).join("");
+  $("onote").textContent=`Outcome №${eventCount+1} · about 15 seconds.`;
+  $("ostep").querySelectorAll(".opt").forEach(el=>
+    el.addEventListener("click",()=>OSTEPS[ostep].opts[+el.dataset.i][2]()));
+}
+function next(){ostep++;renderOutcome()}
+function openOutcome(){ostep=0;orelief="";$("outcome").classList.add("on");renderOutcome()}
+function finish(summary){
+  eventCount++;
+  logEvent("outcome",{summary,n:eventCount});
+  $("outcome").classList.remove("on");
+  toast(`Outcome №${eventCount} recorded: ${summary}.`);
+}
+function closeOutcome(later){
+  $("outcome").classList.remove("on");
+  if(later)toast("Fine. One quiet reminder tonight — nothing else.");
+}
+
+/* ---------- toast ---------- */
+let toastTimer=null;
+function toast(msg){
+  $("toast").textContent=msg;$("toast").style.display="block";
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>$("toast").style.display="none",3500);
+}
+
+/* ---------- boot ---------- */
+(function(){
+  const d=new Date();
+  $("today-date").textContent=d.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"short"}).toUpperCase().replace(",","· ");
+  const q=new URLSearchParams(location.search).get("k");
+  if(q&&!localStorage.getItem(KEYNAME))$("gkey").value=q.toUpperCase();
+  if(localStorage.getItem(KEYNAME)){$("gate").classList.remove("on");show("today")}
+})();
+</script>
+</body>
+</html>
