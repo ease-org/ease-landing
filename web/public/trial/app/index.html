@@ -432,14 +432,29 @@ $("enroll").addEventListener("change",e=>{
 function openSheet(){$("scrim").style.display="block";$("sheet").style.display="block"}
 function closeSheet(){$("scrim").style.display="none";$("sheet").style.display="none"}
 
-/* ---------- dose + demo check-in ---------- */
+/* ---------- dose + demo check-in ----------
+   The pending check-in survives reloads: its due time is persisted and
+   re-armed on boot (fires immediately if already past due). */
 let checkinTimer=null;
+const PENDING="ease_pending_checkin";
+function armCheckin(at){
+  localStorage.setItem(PENDING,String(at));
+  clearTimeout(checkinTimer);
+  checkinTimer=setTimeout(fireCheckin,Math.max(0,at-Date.now()));
+}
+function fireCheckin(){
+  localStorage.removeItem(PENDING);
+  openOutcome();
+}
+function clearPending(){
+  localStorage.removeItem(PENDING);
+  clearTimeout(checkinTimer);
+}
 function logDose(via){
   closeSheet();
   logEvent("dose",{via});
   toast("Dose logged. Check-in in 2 h (15 s in this demo).");
-  clearTimeout(checkinTimer);
-  checkinTimer=setTimeout(openOutcome,15000);
+  armCheckin(Date.now()+15000);
 }
 function voiceStub(){logEvent("voice_stub",{});toast("Voice capture is a stub — note saved locally.")}
 
@@ -472,11 +487,13 @@ function next(){ostep++;renderOutcome()}
 function openOutcome(){ostep=0;orelief="";$("outcome").classList.add("on");renderOutcome()}
 function finish(summary){
   eventCount++;
+  clearPending();
   logEvent("outcome",{summary,n:eventCount});
   $("outcome").classList.remove("on");
   toast(`Outcome №${eventCount} recorded: ${summary}.`);
 }
 function closeOutcome(later){
+  clearPending();
   $("outcome").classList.remove("on");
   if(later)toast("Fine. One quiet reminder tonight — nothing else.");
 }
@@ -494,7 +511,11 @@ function toast(msg){
   $("today-date").textContent=d.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"short"}).toUpperCase().replace(",","· ");
   const q=new URLSearchParams(location.search).get("k");
   if(q&&!localStorage.getItem(KEYNAME))$("gkey").value=q.toUpperCase();
-  if(localStorage.getItem(KEYNAME)){$("gate").classList.remove("on");show("today")}
+  if(localStorage.getItem(KEYNAME)){
+    $("gate").classList.remove("on");show("today");
+    const pending=+localStorage.getItem(PENDING)||0;
+    if(pending)armCheckin(pending);
+  }
 })();
 </script>
 </body>
