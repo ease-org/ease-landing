@@ -12,16 +12,15 @@ test.describe("Home page (index.astro)", () => {
 
     await expect(page).toHaveTitle(/Ease/i);
 
-    // Hero H1: "Know your triggers. Take back your days."
+    // Hero H1: "Your migraine treatment. One clear history."
     const h1 = page.getByRole("heading", { level: 1 });
     await expect(h1).toBeVisible();
-    await expect(h1).toContainText("Know your");
-    await expect(h1).toContainText("triggers"); // rendered inside <em>
-    await expect(h1).toContainText("Take back your days");
+    await expect(h1).toContainText("Your migraine treatment");
+    await expect(h1).toContainText("One clear history");
 
     // Hero subcopy mentions the product promise.
     await expect(
-      page.getByText(/surfaces trigger patterns/i),
+      page.getByText(/record clinician-directed medication trials/i),
     ).toBeVisible();
   });
 
@@ -69,13 +68,13 @@ test.describe("Home page (index.astro)", () => {
   test("feature cards describe what Ease does", async ({ page }) => {
     await page.goto("/#features");
     await expect(
-      page.getByRole("heading", { name: "Continuous Monitoring" }),
+      page.getByRole("heading", { name: "Treatment Trials" }),
     ).toBeVisible();
     await expect(
       page.getByRole("heading", { name: "Privacy First" }),
     ).toBeVisible();
     await expect(
-      page.getByRole("heading", { name: "Personalized Insights" }),
+      page.getByRole("heading", { name: "Appointment-ready Reports" }),
     ).toBeVisible();
   });
 

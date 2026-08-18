@@ -9,17 +9,17 @@ test.describe("Roadmap section", () => {
 
   test("renders the section heading", async ({ page }) => {
     await expect(
-      page.getByRole("heading", { name: /private beta/i, level: 2 }),
+      page.getByRole("heading", { name: /better-informed appointments/i, level: 2 }),
     ).toBeVisible();
   });
 
   test("renders all four phases in order", async ({ page }) => {
     const phaseTitles = page.locator(".rm-title");
     await expect(phaseTitles).toHaveCount(4);
-    await expect(phaseTitles.nth(0)).toHaveText("Private Beta");
-    await expect(phaseTitles.nth(1)).toHaveText("Predictive Intelligence");
-    await expect(phaseTitles.nth(2)).toHaveText("Clinical Validation");
-    await expect(phaseTitles.nth(3)).toContainText("Class II SaMD");
+    await expect(phaseTitles.nth(0)).toHaveText("Treatment History");
+    await expect(phaseTitles.nth(1)).toHaveText("Workflow Validation");
+    await expect(phaseTitles.nth(2)).toHaveText("Shadow Research");
+    await expect(phaseTitles.nth(3)).toHaveText("Regulated Product, If Validated");
   });
 
   test("each phase shows its status badge", async ({ page }) => {
@@ -30,12 +30,12 @@ test.describe("Roadmap section", () => {
   });
 
   test("phase content mentions key roadmap milestones", async ({ page }) => {
-    // Phase 2 — Bayesian model; Phase 4 — FDA 510(k).
+    // Phase 2 validates the workflow; Phase 4 remains gated on evidence.
     await expect(
-      page.getByText(/Bayesian hierarchical model/i),
+      page.getByText(/clinician review of the report format/i),
     ).toBeVisible();
     await expect(
-      page.getByText(/510\(k\) substantial equivalence submission/i),
+      page.getByText(/regulatory submission only after evidence gates/i),
     ).toBeVisible();
   });
 });

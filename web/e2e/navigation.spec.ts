@@ -17,13 +17,13 @@ test.describe("Navigation", () => {
       await featuresLink.click();
       await expect(page).toHaveURL(/#features$/);
       await expect(
-        page.getByRole("heading", { name: "Continuous Monitoring" }),
+        page.getByRole("heading", { name: "Treatment Trials" }),
       ).toBeInViewport();
     } else {
       // Mobile layout: links collapsed. Drive the anchor directly.
       await page.goto("/#roadmap");
       await expect(
-        page.getByRole("heading", { name: "Private Beta", level: 2 }),
+        page.getByRole("heading", { name: /better-informed appointments/i, level: 2 }),
       ).toBeInViewport();
     }
   });

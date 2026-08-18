@@ -9,16 +9,16 @@ import NavCta from "../components/NavCta.svelte";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ease — Migraine Tracking</title>
-    <meta name="description" content="Track migraine attacks, identify triggers, and discover personalized insights that help you live better. Join the private beta." />
+    <title>Ease — Migraine Treatment History</title>
+    <meta name="description" content="Keep a clear history of migraine medication trials, outcomes, and questions for your next appointment. Join the private beta." />
     <meta name="theme-color" content="#1B1B2F" />
     <!-- Social sharing (og:image still TODO — needs a real 1200×630 asset in /public) -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Ease — Migraine Tracking" />
-    <meta property="og:description" content="Track migraine attacks, identify triggers, and get personalized insights — kept completely private. Join the beta." />
+    <meta property="og:title" content="Ease — Migraine Treatment History" />
+    <meta property="og:description" content="Record migraine medication trials and turn them into a clear history you can review and share with your clinician. Join the beta." />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Ease — Migraine Tracking" />
-    <meta name="twitter:description" content="Track migraine attacks, identify triggers, and get personalized insights — kept completely private. Join the beta." />
+    <meta name="twitter:title" content="Ease — Migraine Treatment History" />
+    <meta name="twitter:description" content="Record migraine medication trials and turn them into a clear history you can review and share with your clinician. Join the beta." />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -61,12 +61,12 @@ import NavCta from "../components/NavCta.svelte";
     <section class="hero">
       <div class="hero-halo" aria-hidden="true"></div>
       <div class="hero-content">
-        <p class="eyebrow reveal">MIGRAINE TRACKING · PRIVATE BETA</p>
+        <p class="eyebrow reveal">MIGRAINE TREATMENT HISTORY · PRIVATE BETA</p>
         <h1 class="hero-title reveal" style="--d:80ms">
-          Know your <em>triggers</em>.<br />Take back your days.
+          Your migraine treatment.<br /><em>One clear history.</em>
         </h1>
         <p class="hero-sub reveal" style="--d:160ms">
-          Ease logs your migraine attacks, surfaces trigger patterns, and puts personalized insights in your pocket — all kept completely private.
+          Record clinician-directed medication trials, what happened, and what to bring to your next appointment. Fast to update. Yours to review and share.
         </p>
         <div class="hero-form reveal" id="beta" style="--d:240ms">
           <BetaSignupForm client:load />
@@ -90,16 +90,16 @@ import NavCta from "../components/NavCta.svelte";
             <div class="card-icon icon-purple">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             </div>
-            <h3>Continuous monitoring</h3>
-            <p>Log attacks as they happen with quick-entry flows designed for when you're in pain.</p>
+            <h3>Treatment trials</h3>
+            <p>Keep medications, dates, dosages, and reasons for stopping together.</p>
           </article>
 
           <article class="card reveal" style="--d:60ms">
             <div class="card-icon icon-orange">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
             </div>
-            <h3>Early onset detection</h3>
-            <p>Spot prodrome symptoms early and take action before a full attack sets in.</p>
+            <h3>Quick outcome logging</h3>
+            <p>Record benefit, side effects, and migraine days in a few taps, even on difficult days.</p>
           </article>
 
           <article class="card reveal" style="--d:120ms">
@@ -107,31 +107,31 @@ import NavCta from "../components/NavCta.svelte";
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
             <h3>Privacy first</h3>
-            <p>Your health data stays on your device. We never sell or share what you track.</p>
+            <p>You decide what to record and when to share it. We do not sell your personal data.</p>
           </article>
 
           <article class="card reveal" style="--d:180ms">
             <div class="card-icon icon-purple">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
             </div>
-            <h3>Apple HealthKit</h3>
-            <p>Connects to Apple Health to bring in your sleep, activity, and vitals automatically.</p>
+            <h3>Treatment timeline</h3>
+            <p>See past and current medication trials in one chronological, patient-owned record.</p>
           </article>
 
           <article class="card reveal" style="--d:240ms">
             <div class="card-icon icon-orange">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
             </div>
-            <h3>Personalized insights</h3>
-            <p>Discover your unique trigger patterns with AI-powered analysis of your history.</p>
+            <h3>Appointment-ready reports</h3>
+            <p>Turn your history into a concise summary to review with your clinician.</p>
           </article>
 
           <article class="card reveal" style="--d:300ms">
             <div class="card-icon icon-green">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
             </div>
-            <h3>Daily journaling</h3>
-            <p>Simple check-ins build a full picture of your health, helping correlate how you feel.</p>
+            <h3>Low-burden check-ins</h3>
+            <p>Short prompts keep your history current without asking for a long daily diary.</p>
           </article>
 
         </div>
@@ -144,29 +144,29 @@ import NavCta from "../components/NavCta.svelte";
         <div class="philosophy reveal">
           <div class="philosophy-text">
             <p class="eyebrow">OUR APPROACH</p>
-            <h2>Built for people who live with migraines.</h2>
+            <h2>Built for the reality of migraine treatment.</h2>
             <p class="body-text">
-              Every interface decision — from the dark-first theme to the quick-entry flows — is built around one question: <em>how does this feel when your head is pounding?</em>
+              Appointments are short and treatment histories get fragmented. Ease keeps the details together without adding another demanding routine.
             </p>
             <div class="stats">
               <div class="stat">
-                <span class="stat-n">40+</span>
-                <span class="stat-l">TRACKED TRIGGERS</span>
+                <span class="stat-n">1</span>
+                <span class="stat-l">TREATMENT HISTORY</span>
               </div>
               <span class="stat-div" aria-hidden="true"></span>
               <div class="stat">
                 <span class="stat-n">3</span>
-                <span class="stat-l">SEVERITY LEVELS</span>
+                <span class="stat-l">CORE OUTCOMES</span>
               </div>
               <span class="stat-div" aria-hidden="true"></span>
               <div class="stat">
-                <span class="stat-n">100%</span>
-                <span class="stat-l">PRIVATE</span>
+                <span class="stat-n">YOU</span>
+                <span class="stat-l">CONTROL SHARING</span>
               </div>
             </div>
           </div>
 
-          <div class="philosophy-vis" aria-label="Week view showing migraine severity dots">
+          <div class="philosophy-vis" aria-label="Recent history showing recorded migraine days">
             <div class="week-strip">
               <div class="week-day">
                 <span class="wd-label">MON</span>
@@ -204,7 +204,7 @@ import NavCta from "../components/NavCta.svelte";
                 <span class="wd-num">3</span>
               </div>
             </div>
-            <p class="vis-label">LAST 7 DAYS</p>
+            <p class="vis-label">YOUR RECENT HISTORY</p>
           </div>
         </div>
       </div>
@@ -215,7 +215,7 @@ import NavCta from "../components/NavCta.svelte";
       <div class="container">
         <div class="section-head reveal">
           <p class="eyebrow">ROADMAP</p>
-          <h2>From private beta<br /><span class="text-muted">to FDA-cleared SaMD.</span></h2>
+          <h2>From a clear treatment history<br /><span class="text-muted">to better-informed appointments.</span></h2>
         </div>
         <div class="roadmap-grid">
 
@@ -224,13 +224,13 @@ import NavCta from "../components/NavCta.svelte";
               <span class="rm-badge badge-green">Now</span>
               <span class="rm-phase">Phase 1</span>
             </div>
-            <h3 class="rm-title">Private Beta</h3>
+            <h3 class="rm-title">Treatment History</h3>
             <ul class="rm-list">
-              <li>Migraine attack logging with fast-entry UI</li>
-              <li>40+ triggers, symptom, and medication tracking</li>
-              <li>Apple HealthKit HRV &amp; sleep sync</li>
-              <li>Daily check-ins &amp; journaling</li>
-              <li>7-day calendar &amp; severity history</li>
+              <li>Clinician-directed medication trial records</li>
+              <li>Quick benefit and side-effect logging</li>
+              <li>Migraine-day and severity history</li>
+              <li>Patient-owned chronological timeline</li>
+              <li>Appointment-ready report export</li>
             </ul>
             <div class="rm-connector" aria-hidden="true"></div>
           </div>
@@ -240,13 +240,13 @@ import NavCta from "../components/NavCta.svelte";
               <span class="rm-badge badge-orange">In development</span>
               <span class="rm-phase">Phase 2</span>
             </div>
-            <h3 class="rm-title">Predictive Intelligence</h3>
+            <h3 class="rm-title">Workflow Validation</h3>
             <ul class="rm-list">
-              <li>Bayesian hierarchical model — personalized risk, not population averages</li>
-              <li>12h &amp; 24h migraine risk scores with credible intervals</li>
-              <li>Calibrated uncertainty: "70% risk, CI 58–82%"</li>
-              <li>Contributing factors breakdown per prediction</li>
-              <li>Staging inference API with full data contracts</li>
+              <li>Beta-user interviews and usability testing</li>
+              <li>Clinician review of the report format</li>
+              <li>Low-burden outcome measures</li>
+              <li>Consent and data-governance workflows</li>
+              <li>Pilot operations and support workflows</li>
             </ul>
             <div class="rm-connector" aria-hidden="true"></div>
           </div>
@@ -256,13 +256,13 @@ import NavCta from "../components/NavCta.svelte";
               <span class="rm-badge badge-purple">Planned</span>
               <span class="rm-phase">Phase 3</span>
             </div>
-            <h3 class="rm-title">Clinical Validation</h3>
+            <h3 class="rm-title">Shadow Research</h3>
             <ul class="rm-list">
-              <li>Real-world pilot cohort (n ≥ 20, ≥ 4 weeks each)</li>
-              <li>Ground-truth labeling protocol &amp; governed eval set</li>
-              <li>Time-split calibration gates (ECE, Brier score)</li>
-              <li>ISO 14971 risk management file</li>
-              <li>Human factors usability study plan</li>
+              <li>Prospective observational cohort</li>
+              <li>Pre-specified evaluation protocol</li>
+              <li>No user-facing predictions or treatment advice</li>
+              <li>Calibration and subgroup performance checks</li>
+              <li>Independent clinical and statistical review</li>
             </ul>
             <div class="rm-connector" aria-hidden="true"></div>
           </div>
@@ -272,13 +272,13 @@ import NavCta from "../components/NavCta.svelte";
               <span class="rm-badge badge-dim">Target</span>
               <span class="rm-phase">Phase 4</span>
             </div>
-            <h3 class="rm-title">FDA 510(k) — Class II SaMD</h3>
+            <h3 class="rm-title">Regulated Product, If Validated</h3>
             <ul class="rm-list">
-              <li>Quality Management System (ISO 13485 / 21 CFR 820)</li>
-              <li>Design History File (DHF) — complete audit trail</li>
-              <li>Post-Market Surveillance &amp; complaint handling plan</li>
-              <li>510(k) substantial equivalence submission</li>
-              <li>FDA clearance as Class II Software as a Medical Device</li>
+              <li>Intended-purpose and classification assessment</li>
+              <li>Quality and risk management systems</li>
+              <li>Clinical performance and utility evidence</li>
+              <li>Human factors and cybersecurity validation</li>
+              <li>Regulatory submission only after evidence gates</li>
             </ul>
           </div>
 
