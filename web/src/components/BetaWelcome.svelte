@@ -107,7 +107,7 @@
           <div class="step-num">3</div>
           <div class="step-body">
             <span class="step-title">Start tracking</span>
-            <span class="step-desc">Install Ease, connect Apple HealthKit, and start logging. Your data helps calibrate the predictive models.</span>
+            <span class="step-desc">Install Ease and start recording medication trials and migraine outcomes. Your feedback helps us improve the workflow.</span>
           </div>
           <span class="step-tag tag-dim">Soon</span>
         </div>
@@ -122,24 +122,24 @@
         <div class="phase-item phase-active">
           <span class="phase-dot dot-green" aria-hidden="true"></span>
           <div>
-            <span class="phase-name">Phase 1 · Private Beta</span>
-            <span class="phase-desc">Migraine logging, trigger tracking, Apple HealthKit sync</span>
+            <span class="phase-name">Phase 1 · Treatment History</span>
+            <span class="phase-desc">Medication trials, migraine outcomes, appointment-ready reports</span>
           </div>
           <span class="phase-badge badge-green">Active</span>
         </div>
         <div class="phase-item">
           <span class="phase-dot dot-orange" aria-hidden="true"></span>
           <div>
-            <span class="phase-name">Phase 2 · Predictive Intelligence</span>
-            <span class="phase-desc">Bayesian risk model, 12h/24h scores, uncertainty quantification</span>
+            <span class="phase-name">Phase 2 · Workflow Validation</span>
+            <span class="phase-desc">User research, clinician review, low-burden outcome measures</span>
           </div>
           <span class="phase-badge badge-orange">In development</span>
         </div>
         <div class="phase-item">
           <span class="phase-dot dot-dim" aria-hidden="true"></span>
           <div>
-            <span class="phase-name">Phase 3 → 4 · Clinical Validation &amp; FDA 510(k)</span>
-            <span class="phase-desc">Real-world pilot, calibration, ISO 14971, SaMD clearance</span>
+            <span class="phase-name">Phase 3 → 4 · Shadow Research &amp; Evidence Gates</span>
+            <span class="phase-desc">Prospective study, independent review, regulatory assessment if validated</span>
           </div>
           <span class="phase-badge badge-dim">Planned</span>
         </div>
