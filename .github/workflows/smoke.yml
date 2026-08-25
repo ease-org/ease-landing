@@ -1,0 +1,34 @@
+name: Post-deploy smoke test
+
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    if: github.event.deployment_status.state == 'success' && github.event.deployment_status.environment == 'Production'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Smoke-test production pages
+        env:
+          BASE_URL: ${{ github.event.deployment_status.environment_url || 'https://ease-health.org' }}
+        run: |
+          set -u
+          check() {
+            path="$1"; marker="${2:-}"
+            for attempt in 1 2 3; do
+              body=$(curl -fsSL --max-time 20 "${BASE_URL}${path}") \
+                && { [ -z "$marker" ] || printf '%s' "$body" | grep -qiE "$marker"; } \
+                && { echo "OK ${path}"; return 0; }
+              echo "attempt ${attempt}/3 failed for ${path}; retrying in 5s"
+              sleep 5
+            done
+            echo "FAIL ${path} (non-200 or marker '${marker}' missing) at ${BASE_URL}${path}"
+            return 1
+          }
+          fail=0
+          check / '<title[^>]*>[^<]*ease' || fail=1
+          check /trial '' || fail=1
+          exit "$fail"
