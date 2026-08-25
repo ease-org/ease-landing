@@ -4,6 +4,21 @@
       "source": "/oauth/consent",
       "destination": "/auth/oauth/consent",
       "statusCode": 301
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "cookie", "key": "ease-lang", "value": "fi" }],
+      "destination": "/fi/",
+      "statusCode": 307
+    },
+    {
+      "source": "/",
+      "missing": [{ "type": "cookie", "key": "ease-lang" }],
+      "has": [
+        { "type": "header", "key": "accept-language", "value": "(?i)^fi.*$" }
+      ],
+      "destination": "/fi/",
+      "statusCode": 307
     }
   ]
 }

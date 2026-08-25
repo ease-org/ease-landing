@@ -1,11 +1,14 @@
 <!doctype html>
-<html lang="en">
+<!-- Finnish copy of /trial/index.html — keep the two files' structure and JS
+     in sync when either changes. FI strings are machine-drafted and need
+     native review (Konsta). -->
+<html lang="fi">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#1b1610">
-<title>ease · trial</title>
+<title>ease · kokeilu</title>
 <style>
   :root{
     --ground:#1b1610;--deep:#120e0a;--card:#241d15;--card2:#2b2318;--line:#322a1e;
@@ -59,53 +62,60 @@
 <body>
 <main>
   <div class="topline">
-    <p class="eyebrow">ease · closed trial</p>
-    <a class="langlink" href="/fi/trial/" data-lang="fi" hreflang="fi">Suomeksi</a>
+    <p class="eyebrow">ease · suljettu kokeilu</p>
+    <a class="langlink" href="/trial/" data-lang="en" hreflang="en">In English</a>
   </div>
 
   <section id="gate">
-    <h1>Enter your trial key.</h1>
-    <p class="sub">You got it from the ease team.</p>
+    <h1>Syötä kokeiluavaimesi.</h1>
+    <p class="sub">Sait sen ease-tiimiltä.</p>
     <div class="card">
-      <label for="key">Trial key</label>
+      <label for="key">Kokeiluavain</label>
       <input id="key" placeholder="EASE-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
       <p class="msg" id="msg"></p>
-      <button class="primary" id="go">Unlock</button>
+      <button class="primary" id="go">Avaa</button>
     </div>
-    <p class="fine">Demo data only. The trial stores your key and the events you log — nothing else. Data stays in the EU (Stockholm).</p>
+    <p class="fine">Vain demodataa. Kokeilu tallentaa avaimesi ja kirjaamasi tapahtumat — ei muuta. Tiedot pysyvät EU:ssa (Tukholma).</p>
   </section>
 
   <section id="unlocked">
-    <h1>You're in.</h1>
-    <p class="sub">Pick your phone.</p>
+    <h1>Olet sisällä.</h1>
+    <p class="sub">Valitse puhelimesi.</p>
 
     <a class="dl" id="apk" href="/trial/dusk-android.apk" download>
-      <div class="t"><b>Android</b><span>Download the app (≈10&nbsp;MB APK)</span></div>
+      <div class="t"><b>Android</b><span>Lataa sovellus (≈10&nbsp;Mt APK)</span></div>
       <div class="chev">›</div>
     </a>
     <ol class="steps">
-      <li>Open the downloaded file and allow the install.</li>
-      <li>Enter this same trial key on first launch.</li>
+      <li>Avaa ladattu tiedosto ja salli asennus.</li>
+      <li>Syötä sama kokeiluavain ensimmäisellä käynnistyskerralla.</li>
     </ol>
 
     <a class="dl" id="webapp" href="/trial/app/">
-      <div class="t"><b>iPhone</b><span>Open the web app, then add it to your home screen</span></div>
+      <div class="t"><b>iPhone</b><span>Avaa verkkosovellus ja lisää se aloitusnäytölle</span></div>
       <div class="chev">›</div>
     </a>
     <ol class="steps">
-      <li>Open in Safari.</li>
-      <li>Tap Share, then <b>Add to Home Screen</b>.</li>
-      <li>Launch it from the icon — it runs full-screen.</li>
+      <li>Avaa Safarissa.</li>
+      <li>Napauta Jaa ja valitse <b>Lisää aloitusnäyttöön</b>.</li>
+      <li>Avaa sovellus kuvakkeesta — se toimii koko näytöllä.</li>
     </ol>
 
-    <p class="keytag">key <span id="keymask"></span> · <a id="reset">use a different key</a></p>
-    <p class="fine">Both apps log trial events (doses, outcomes, attacks) to the ease trial database so the team can see usage. No health record is created in this demo.</p>
+    <p class="keytag">avain <span id="keymask"></span> · <a id="reset">käytä toista avainta</a></p>
+    <p class="fine">Molemmat sovellukset kirjaavat kokeilutapahtumat (annokset, vasteet, kohtaukset) easen kokeilutietokantaan, jotta tiimi näkee käytön. Demossa ei luoda terveystietorekisteriä. Sovellus itsessään on toistaiseksi englanninkielinen.</p>
   </section>
 </main>
 <script>
 const SB="https://yolwyazckiqdjhepjiex.supabase.co";
 const ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbHd5YXpja2lxZGpoZXBqaWV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDM3MDcsImV4cCI6MjEwMjUxOTcwN30.KpJWaelY1zenLyVZEHxNEhktNPUvQnneBEI6mYqXQVs";
 const KEYNAME="ease_trial_key";
+const MSG={
+  short:"Avain näyttää liian lyhyeltä.",
+  checking:"Tarkistetaan…",
+  unlock:"Avaa",
+  unknown:"Avainta ei tunnistettu. Tarkista se ja yritä uudelleen.",
+  offline:"Ei yhteyttä — yritä hetken kuluttua uudelleen."
+};
 const $=id=>document.getElementById(id);
 
 async function validate(k){
@@ -130,16 +140,16 @@ function showUnlocked(){
 $("go").addEventListener("click",async()=>{
   const inp=$("key"),k=inp.value.trim().toUpperCase();
   inp.classList.remove("err");$("msg").textContent="";
-  if(k.length<8){inp.classList.add("err");$("msg").textContent="That key looks too short.";return}
-  $("go").disabled=true;$("go").textContent="Checking…";
+  if(k.length<8){inp.classList.add("err");$("msg").textContent=MSG.short;return}
+  $("go").disabled=true;$("go").textContent=MSG.checking;
   try{
     if(await validate(k)){
       localStorage.setItem(KEYNAME,k);
       logEvent("gate_unlock",{src:"gate"});
       showUnlocked();
-    }else{inp.classList.add("err");$("msg").textContent="Key not recognized. Check it and try again."}
-  }catch(e){$("msg").textContent="No connection — try again in a moment."}
-  $("go").disabled=false;$("go").textContent="Unlock";
+    }else{inp.classList.add("err");$("msg").textContent=MSG.unknown}
+  }catch(e){$("msg").textContent=MSG.offline}
+  $("go").disabled=false;$("go").textContent=MSG.unlock;
 });
 $("key").addEventListener("keydown",e=>{if(e.key==="Enter")$("go").click()});
 document.addEventListener("DOMContentLoaded",()=>{
