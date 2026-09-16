@@ -74,8 +74,8 @@
     <h1>You're in.</h1>
     <p class="sub">Pick your phone.</p>
 
-    <a class="dl" id="apk" href="/trial/dusk-android.apk" download>
-      <div class="t"><b>Android</b><span>Download the app (≈10&nbsp;MB APK)</span></div>
+    <a class="dl" id="apk" href="/trial/download">
+      <div class="t"><b>Android</b><span>Download the app (≈11&nbsp;MB APK)</span></div>
       <div class="chev">›</div>
     </a>
     <ol class="steps">
@@ -121,6 +121,9 @@ function showUnlocked(){
   $("gate").style.display="none";
   $("unlocked").style.display="block";
   $("keymask").textContent="····"+key.slice(-4);
+  // The APK is not a file on this site. /trial/download checks the key again,
+  // server-side, and redirects to a link that dies after a minute.
+  $("apk").href="/trial/download?k="+encodeURIComponent(key);
 }
 $("go").addEventListener("click",async()=>{
   const inp=$("key"),k=inp.value.trim().toUpperCase();

@@ -7,6 +7,11 @@ import { test, expect, type Page } from "@playwright/test";
  * supabase-mock helper covers), so this spec installs its own route mocks:
  * the validate RPC answers true only for VALID_KEY, and every event insert
  * is captured for assertions. No real network requests leave the test.
+ *
+ * The APK itself is not part of this build. It sits in a private bucket and is
+ * reached through /trial/download, a serverless function that re-checks the key
+ * server-side; `astro preview` serves only the static output, so these tests
+ * cover the link the page builds, and that no APK is sitting in public/.
  */
 
 const VALID_KEY = "EASE-TEST-VAL1";
@@ -60,12 +65,17 @@ test.describe("Trial gate (/trial/)", () => {
     await page.locator("#key").fill(VALID_KEY);
     await page.locator("#go").click();
     await expect(page.locator("#unlocked")).toBeVisible();
-    await expect(page.locator("#apk")).toHaveAttribute("href", "/trial/dusk-android.apk");
+    await expect(page.locator("#apk")).toHaveAttribute("href", `/trial/download?k=${VALID_KEY}`);
     await expect(page.locator("#webapp")).toHaveAttribute("href", "/trial/app/");
     await expect.poll(() => events.map((e) => e.kind)).toContain("gate_unlock");
     const unlock = events.find((e) => e.kind === "gate_unlock");
     expect(unlock?.trial_key).toBe(VALID_KEY);
     expect(unlock?.platform).toBe("web");
+  });
+
+  test("the APK is not a static asset of the site", async ({ page }) => {
+    const response = await page.request.get("/trial/ease-android.apk");
+    expect(response.status()).toBe(404);
   });
 });
 
