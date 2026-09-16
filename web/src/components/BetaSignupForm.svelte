@@ -3,11 +3,16 @@
   import { onMount } from "svelte";
   import { SUPABASE_URL, SUPABASE_ANON_KEY } from "../lib/env";
   import OAuthButtons from "./OAuthButtons.svelte";
+  import { ui, defaultLang, type Lang } from "../i18n/ui";
+
+  export let lang: Lang = defaultLang;
 
   let email = "";
   let status: "idle" | "loading" | "sent" | "signed_in" | "success" | "error" = "idle";
   let message = "";
   let supabase: SupabaseClient;
+
+  $: f = ui[lang].form;
 
   onMount(() => {
     supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -23,12 +28,12 @@
     // Handle PKCE code exchange first
     if (code) {
       status = "loading";
-      message = "Completing sign in...";
+      message = f.completingSignIn;
 
       const { data, error } = await supabase.auth.exchangeCodeForSession(code);
       if (error || !data.session) {
         status = "error";
-        message = error?.message ?? "Authentication failed.";
+        message = error?.message ?? f.authFailed;
         const cleanUrl = new URL(window.location.href);
         cleanUrl.search = "";
         cleanUrl.hash = "";
@@ -52,7 +57,7 @@
     if (searchParams.has("access_token") || searchParams.has("type") ||
         hash.includes("access_token") || hash.includes("type=signup") || hash.includes("type=login")) {
       status = "loading";
-      message = "Completing sign in...";
+      message = f.completingSignIn;
 
       const { data: { user }, error } = await supabase.auth.getUser();
 
@@ -80,14 +85,14 @@
     if (error) {
       if (error.code === "23505") {
         status = "success";
-        message = "You're already on the list! We'll be in touch soon.";
+        message = f.alreadyOnList;
       } else {
         status = "error";
         message = error.message;
       }
     } else {
       status = "success";
-      message = "You're on the list! We'll be in touch soon.";
+      message = f.onList;
     }
     window.history.replaceState({}, "", window.location.pathname);
   }
@@ -111,7 +116,7 @@
       message = error.message;
     } else {
       status = "sent";
-      message = "Check your email for a magic sign-in link.";
+      message = f.magicLinkSent;
     }
   }
 </script>
@@ -126,7 +131,7 @@
   {:else if status === "signed_in"}
     <div class="state-card loading">
       <svg class="s-icon spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-      <p>Completing sign in…</p>
+      <p>{f.completingSignIn}</p>
     </div>
 
   {:else if status === "sent"}
@@ -134,25 +139,25 @@
       <svg class="s-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
       <div>
         <p>{message}</p>
-        <p class="hint">Click the link in your email to complete sign-up.</p>
+        <p class="hint">{f.magicLinkHint}</p>
       </div>
     </div>
 
   {:else}
     <form on:submit={handleSubmit}>
-      <OAuthButtons redirectTo={typeof window !== "undefined" ? `${window.location.origin}/beta` : ""} />
-      <div class="divider"><span>or continue with email</span></div>
+      <OAuthButtons redirectTo={typeof window !== "undefined" ? `${window.location.origin}/beta` : ""} {lang} />
+      <div class="divider"><span>{f.orEmail}</span></div>
       <div class="row">
         <input
           type="email"
           bind:value={email}
-          placeholder="your@email.com"
+          placeholder={f.emailPlaceholder}
           required
           disabled={status === "loading"}
           autocomplete="email"
         />
         <button type="submit" disabled={status === "loading"}>
-          {status === "loading" ? "Sending…" : "Get early access"}
+          {status === "loading" ? f.sending : f.submit}
         </button>
       </div>
       {#if message && status === "error"}
