@@ -5,5 +5,11 @@
       "destination": "/auth/oauth/consent",
       "statusCode": 301
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/trial/download",
+      "destination": "/api/trial-download"
+    }
   ]
 }
