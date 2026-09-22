@@ -1,0 +1,52 @@
+/*
+ * Ease design tokens: Ember Kiln light, tuned.
+ * Copied from the Ease design system (tokens.json), which mirrors EaseTheme in
+ * ease-kotlin app/src/main/kotlin/org/easehealth/ease/designsystem/Theme.kt.
+ * Change a value there first, then here. Light-only, like the app.
+ *
+ * Warm paper and graphite are fact. The icy blues are inference only. Coral means an
+ * attack and sage the start of the path or a confirmed day, nothing else. Amber and
+ * violet tint treatment eras and are never text.
+ */
+:root {
+  color-scheme: light;
+
+  /* Surfaces and ink */
+  --ground: #fbf6ed;
+  --card: #f4eddf;
+  --card2: #ece2ce;
+  --line: #dcceb4;
+  --ink: #2a2826;      /* 13.6:1 on ground */
+  --ink2: #5f5c58;     /* 6.2:1 on ground, 5.2:1 on card2 */
+  --ink3: #8b8783;     /* 3.3:1: incidental text only, never information */
+  --accent: #4a4845;   /* graphite: the plus, primary buttons */
+  --accent-dim: #dad6d0;
+  --on-accent: #fbf6ed;
+
+  /* Semantic, marks only (below 4.5:1 as text) */
+  --coral: #b5655c;
+  --sage: #5f8b75;
+  --grey: #b9b4ad;
+
+  /* Inference: the icy ramp */
+  --ice-pale: #e6f2f9;
+  --ice-light: #b9d9ec;
+  --ice-mid: #7fb3d8;
+  --ice-deep: #3d7db2;
+
+  /* Treatment eras: tint the paper at 15 %, never text */
+  --era-amber: #d9a650;
+  --era-violet: #8f86c8;
+  --era-band-amber: #f6ead5;
+  --era-band-violet: #ebe5e7;
+  --era-label-amber: #93743f;
+  --era-label-violet: #676087;
+
+  /* Shape */
+  --radius-field: 12px;
+  --radius-card: 20px;
+  --radius-pill: 9999px;
+  --space-gutter: 16px;
+
+  --font-sans: Figtree, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
