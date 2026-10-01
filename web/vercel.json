@@ -4,9 +4,27 @@
       "source": "/oauth/consent",
       "destination": "/auth/oauth/consent",
       "statusCode": 301
+    },
+    {
+      "source": "/trial/app",
+      "destination": "/app/",
+      "statusCode": 301
+    },
+    {
+      "source": "/trial/app/:path*",
+      "destination": "/app/",
+      "statusCode": 301
     }
   ],
   "rewrites": [
+    {
+      "source": "/app",
+      "destination": "https://EASE-WEB-PRODUCTION-HOST/app/"
+    },
+    {
+      "source": "/app/:path*",
+      "destination": "https://EASE-WEB-PRODUCTION-HOST/app/:path*"
+    },
     {
       "source": "/trial/download",
       "destination": "/api/trial-download"

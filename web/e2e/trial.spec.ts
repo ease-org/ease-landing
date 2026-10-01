@@ -1,9 +1,9 @@
 import { test, expect, type Page } from "@playwright/test";
 
 /**
- * Trial distribution pages (/trial/ gate and /trial/app/ web app).
+ * Trial distribution page (/trial/ gate).
  *
- * Both pages talk to the ease-trial Supabase project (NOT the main one the
+ * The page talks to the ease-trial Supabase project (NOT the main one the
  * supabase-mock helper covers), so this spec installs its own route mocks:
  * the validate RPC answers true only for VALID_KEY, and every event insert
  * is captured for assertions. No real network requests leave the test.
@@ -12,6 +12,11 @@ import { test, expect, type Page } from "@playwright/test";
  * reached through /trial/download, a serverless function that re-checks the key
  * server-side; `astro preview` serves only the static output, so these tests
  * cover the link the page builds, and that no APK is sitting in public/.
+ *
+ * The iPhone app is ease-web, a separate private Vercel project that this site
+ * proxies at /app/ (rewrite in vercel.json). `astro preview` does not apply
+ * vercel.json, so the tests cover the hand-off link and that the old static
+ * demo under /trial/app/ is no longer part of the build.
  */
 
 const VALID_KEY = "EASE-TEST-VAL1";
@@ -66,7 +71,7 @@ test.describe("Trial gate (/trial/)", () => {
     await page.locator("#go").click();
     await expect(page.locator("#unlocked")).toBeVisible();
     await expect(page.locator("#apk")).toHaveAttribute("href", `/trial/download?k=${VALID_KEY}`);
-    await expect(page.locator("#webapp")).toHaveAttribute("href", "/trial/app/");
+    await expect(page.locator("#webapp")).toHaveAttribute("href", `/app/?k=${VALID_KEY}`);
     await expect.poll(() => events.map((e) => e.kind)).toContain("gate_unlock");
     const unlock = events.find((e) => e.kind === "gate_unlock");
     expect(unlock?.trial_key).toBe(VALID_KEY);
@@ -77,96 +82,9 @@ test.describe("Trial gate (/trial/)", () => {
     const response = await page.request.get("/trial/ease-android.apk");
     expect(response.status()).toBe(404);
   });
-});
 
-test.describe("Trial web app (/trial/app/)", () => {
-  let events: TrialEvent[];
-
-  test.beforeEach(async ({ page }) => {
-    events = [];
-    await mockTrialDb(page, events);
-  });
-
-  test("shows the key gate when no key is stored", async ({ page }) => {
-    await page.goto("/trial/app/");
-    await expect(page.locator("#gate")).toBeVisible();
-    await expect(page.locator("#s-today")).toBeHidden();
-  });
-
-  test("with a stored key: tabs navigate and the outcome flow records an event", async ({ page }) => {
-    await page.addInitScript(
-      ([name, key]) => localStorage.setItem(name, key),
-      [KEYNAME, VALID_KEY],
-    );
-    await page.goto("/trial/app/");
-
-    // Gate skipped, Today visible.
-    await expect(page.locator("#gate")).toBeHidden();
-    await expect(page.locator("#s-today h1")).toHaveText("Quiet so far.");
-
-    // Tab navigation.
-    await page.locator("nav div", { hasText: "Timeline" }).click();
-    await expect(page.locator("#s-timeline h1")).toBeVisible();
-    await page.locator("nav div", { hasText: "Report" }).click();
-    await expect(page.locator("#s-report h1")).toBeVisible();
-    await page.locator("nav div", { hasText: "Research" }).click();
-    await expect(page.locator("#s-research h1")).toBeVisible();
-    await page.locator("nav div", { hasText: "Today" }).click();
-
-    // FAB -> sheet -> three-tap outcome flow.
-    await page.locator("#fab").click();
-    await expect(page.locator("#sheet")).toBeVisible();
-    await page.locator("#sheet .tap", { hasText: "Record outcome now" }).click();
-    await expect(page.locator("#outcome .q")).toHaveText("Did you take it?");
-    await page.locator("#outcome .opt", { hasText: "Taken · 14:32" }).click();
-    await page.locator("#outcome .opt", { hasText: "Pain-free" }).click();
-    await page.locator("#outcome .opt", { hasText: "Could work" }).click();
-    await expect(page.locator("#outcome")).toBeHidden();
-    await expect(page.locator("#toast")).toContainText("Outcome №10 recorded");
-
-    const outcome = events.find((e) => e.kind === "outcome");
-    expect(outcome?.trial_key).toBe(VALID_KEY);
-    expect((outcome?.payload as { summary?: string })?.summary).toBe("pain-free, functional");
-  });
-
-  test("research passive-sources toggle stays gated behind enrollment", async ({ page }) => {
-    await page.addInitScript(
-      ([name, key]) => localStorage.setItem(name, key),
-      [KEYNAME, VALID_KEY],
-    );
-    await page.goto("/trial/app/");
-    await page.locator("nav div", { hasText: "Research" }).click();
-    await expect(page.locator("#passive")).toBeDisabled();
-    await page.locator("#enroll").click();
-    await expect(page.locator("#passive")).toBeEnabled();
-    await page.locator("#enroll").click();
-    await expect(page.locator("#passive")).toBeDisabled();
-    await expect(page.locator("#passive")).not.toBeChecked();
-  });
-
-  test("low-stim entry logs an attack event and exits cleanly", async ({ page }) => {
-    await page.addInitScript(
-      ([name, key]) => localStorage.setItem(name, key),
-      [KEYNAME, VALID_KEY],
-    );
-    await page.goto("/trial/app/");
-    await page.locator(".lowstim-chip").click();
-    await expect(page.locator("#lowstim")).toBeVisible();
-    await expect.poll(() => events.map((e) => e.kind)).toContain("attack");
-    await page.locator(".ls-link").click();
-    await expect(page.locator("#lowstim")).toBeHidden();
-  });
-
-  test("a past-due pending check-in reopens the outcome flow after reload", async ({ page }) => {
-    await page.addInitScript(
-      ([name, key]) => {
-        localStorage.setItem(name, key);
-        localStorage.setItem("ease_pending_checkin", String(Date.now() - 1000));
-      },
-      [KEYNAME, VALID_KEY],
-    );
-    await page.goto("/trial/app/");
-    await expect(page.locator("#outcome")).toBeVisible();
-    await expect(page.locator("#outcome .q")).toHaveText("Did you take it?");
+  test("the old static iPhone demo is gone from the build", async ({ page }) => {
+    const response = await page.request.get("/trial/app/index.html");
+    expect(response.status()).toBe(404);
   });
 });

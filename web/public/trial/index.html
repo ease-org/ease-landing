@@ -83,14 +83,15 @@
       <li>Enter this same trial key on first launch.</li>
     </ol>
 
-    <a class="dl" id="webapp" href="/trial/app/">
-      <div class="t"><b>iPhone</b><span>Open the web app, then add it to your home screen</span></div>
+    <a class="dl" id="webapp" href="/app/">
+      <div class="t"><b>iPhone</b><span>Open the Ease web app, then add it to your home screen</span></div>
       <div class="chev">›</div>
     </a>
     <ol class="steps">
       <li>Open in Safari.</li>
       <li>Tap Share, then <b>Add to Home Screen</b>.</li>
-      <li>Launch it from the icon — it runs full-screen.</li>
+      <li>Launch it from the icon — it runs full-screen and works offline.</li>
+      <li>This is the same app as on Android, until the iPhone app reaches TestFlight.</li>
     </ol>
 
     <p class="keytag">key <span id="keymask"></span> · <a id="reset">use a different key</a></p>
@@ -124,6 +125,8 @@ function showUnlocked(){
   // The APK is not a file on this site. /trial/download checks the key again,
   // server-side, and redirects to a link that dies after a minute.
   $("apk").href="/trial/download?k="+encodeURIComponent(key);
+ // The web app checks the key again on its own server before it serves any of its code.
+ $("webapp").href="/app/?k="+encodeURIComponent(key);
 }
 $("go").addEventListener("click",async()=>{
   const inp=$("key"),k=inp.value.trim().toUpperCase();
