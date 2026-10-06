@@ -38,7 +38,10 @@ const en = {
     skipToContent: "Skip to content",
     mainNav: "Main navigation",
     langSwitch: "Change language",
-    weekVis: "Recent history showing recorded migraine days",
+    weekVis:
+      "Recent week: Monday and Tuesday quiet, an attack on Wednesday, Thursday not yet confirmed, a dose on Friday, Saturday quiet, today is Sunday.",
+    motionPause: "Pause background motion",
+    motionPlay: "Play background motion",
   },
   nav: {
     features: "Features",
@@ -59,8 +62,7 @@ const en = {
   },
   features: {
     eyebrow: "What Ease does",
-    headline1: "Everything you need.",
-    headline2: "Nothing you don't.",
+    headline: "What you can keep in Ease",
     cards: [
       {
         title: "Treatment trials",
@@ -92,11 +94,7 @@ const en = {
     eyebrow: "Our approach",
     headline: "Built for the reality of migraine treatment.",
     body: "Appointments are short and treatment histories get fragmented. Ease keeps the details together without adding another demanding routine.",
-    stats: [
-      { n: "1", label: "Treatment history" },
-      { n: "3", label: "Core outcomes" },
-      { n: "YOU", label: "Control sharing" },
-    ],
+    body2: "It counts what happened. What it means is for you and your clinician to decide.",
     weekdays: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
     visLabel: "Your recent history",
   },
@@ -155,7 +153,7 @@ const en = {
   footer: {
     privacy: "Privacy Policy",
     terms: "Terms of Use",
-    copyright: "© 2026 Ease Health. Made with care.",
+    copyright: "© 2026 Ease Health",
   },
   form: {
     orEmail: "or continue with email",
@@ -220,7 +218,10 @@ const fi: Messages = {
     skipToContent: "Siirry sisältöön",
     mainNav: "Päänavigointi",
     langSwitch: "Vaihda kieli",
-    weekVis: "Viimeaikainen historia kirjatuista migreenipäivistä",
+    weekVis:
+      "Viime viikko: maanantai ja tiistai rauhallisia, kohtaus keskiviikkona, torstai vielä vahvistamatta, lääke perjantaina, lauantai rauhallinen, tänään on sunnuntai.",
+    motionPause: "Pysäytä taustan liike",
+    motionPlay: "Käynnistä taustan liike",
   },
   nav: {
     features: "Ominaisuudet",
@@ -243,8 +244,7 @@ const fi: Messages = {
   },
   features: {
     eyebrow: "Mitä Ease tekee",
-    headline1: "Kaikki mitä tarvitset.",
-    headline2: "Ei mitään turhaa.",
+    headline: "Mitä voit pitää tallessa Easessa",
     cards: [
       {
         title: "Hoitokokeilut",
@@ -276,11 +276,7 @@ const fi: Messages = {
     eyebrow: "Lähestymistapamme",
     headline: "Rakennettu migreenin hoidon arkeen.",
     body: "Vastaanotot ovat lyhyitä, ja hoitohistoria pirstaloituu helposti. Ease pitää yksityiskohdat koossa lisäämättä arkeen uutta vaativaa rutiinia.",
-    stats: [
-      { n: "1", label: "Hoitohistoria" },
-      { n: "3", label: "Keskeistä vastetta" },
-      { n: "SINÄ", label: "Päätät jakamisesta" },
-    ],
+    body2: "Ease laskee, mitä tapahtui. Mitä se tarkoittaa, sen päätätte sinä ja lääkärisi.",
     weekdays: ["MA", "TI", "KE", "TO", "PE", "LA", "SU"],
     visLabel: "Viimeaikainen historiasi",
   },
@@ -341,7 +337,7 @@ const fi: Messages = {
     // NOTE: /privacy and /terms pages themselves are still English-only.
     privacy: "Tietosuojaseloste",
     terms: "Käyttöehdot",
-    copyright: "© 2026 Ease Health. Tehty huolella.",
+    copyright: "© 2026 Ease Health",
   },
   form: {
     orEmail: "tai jatka sähköpostilla",

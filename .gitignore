@@ -40,3 +40,7 @@ web/playwright-report/
 web/test-results/
 web/.playwright/
 web/blob-report/
+
+# Trial builds. The APK is served from a private bucket through /trial/download,
+# never as a static asset of this public repo — see README, "Closed trial".
+*.apk

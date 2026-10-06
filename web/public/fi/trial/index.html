@@ -56,6 +56,16 @@
   .fine{color:var(--ink3);font-size:13.5px;margin-top:20px;line-height:1.5}
   .keytag{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--ink2);font-size:13px;margin-top:16px}
   .keytag a{color:var(--ink3);text-decoration:underline;cursor:pointer}
+  input.plain{font:400 17px/1.3 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;letter-spacing:0;text-transform:none;padding:14px;margin-bottom:12px}
+  .choice{display:flex;gap:10px;margin-bottom:12px}
+  .choice label{flex:1;margin:0;background:var(--ground);border:1.5px solid var(--line);border-radius:14px;padding:12px;text-align:center;color:var(--ink);cursor:pointer}
+  .choice input{position:absolute;opacity:0;width:1px;height:1px}
+  .choice input:checked+span{color:var(--apricot);font-weight:650}
+  .consent{display:flex;gap:10px;align-items:flex-start;color:var(--ink2);font-size:13.5px;margin:4px 0 0}
+  .consent input{width:auto;margin-top:3px;accent-color:var(--apricot)}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  h2{font-size:22px;font-weight:650;margin-top:36px}
+  .ok{color:var(--apricot);font-size:15px;margin-top:10px}
   #unlocked{display:none}
 </style>
 </head>
@@ -75,47 +85,60 @@
       <p class="msg" id="msg"></p>
       <button class="primary" id="go">Avaa</button>
     </div>
-    <p class="fine">Vain demodataa. Kokeilu tallentaa avaimesi ja kirjaamasi tapahtumat — ei muuta. Tiedot pysyvät EU:ssa (Tukholma).</p>
+    <p class="fine">Vain demodataa. Kokeilu tallentaa avaimesi ja kirjaamasi tapahtumat, ei muuta. Tiedot pysyvät EU:ssa (Tukholma).</p>
+
+    <h2 id="request">Eikö sinulla ole vielä avainta?</h2>
+    <p class="sub">Pyydä avain, niin lähetämme sen sähköpostiisi.</p>
+    <form class="card" method="post" action="https://app.ease-health.org/api/trial/request">
+      <input type="hidden" name="lang" value="fi">
+      <label for="rname">Nimi</label>
+      <input class="plain" id="rname" name="name" required maxlength="120" autocomplete="name">
+      <label for="remail">Sähköposti</label>
+      <input class="plain" id="remail" name="email" type="email" required maxlength="254" autocomplete="email">
+      <label>Puhelimesi</label>
+      <div class="choice">
+        <label><input type="radio" name="platform" value="ios" required><span>iPhone</span></label>
+        <label><input type="radio" name="platform" value="android"><span>Android</span></label>
+      </div>
+      <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+      <label class="consent"><input type="checkbox" name="consent" value="yes" required><span>Ease saa tallentaa nimeni, sähköpostini ja puhelimeni tyypin tämän pyynnön käsittelyä ja kokeiluavaimen lähettämistä varten. Tiedot säilytetään EU:ssa ja poistetaan pyynnöstä (konsta@ease-health.org).</span></label>
+      <p class="msg" id="rmsg"></p>
+      <button class="primary" type="submit">Pyydä avain</button>
+    </form>
   </section>
 
   <section id="unlocked">
     <h1>Olet sisällä.</h1>
     <p class="sub">Valitse puhelimesi.</p>
 
-    <a class="dl" id="apk" href="/trial/dusk-android.apk" download>
-      <div class="t"><b>Android</b><span>Lataa sovellus (≈10&nbsp;Mt APK)</span></div>
+    <a class="dl" id="apk" href="/trial/download">
+      <div class="t"><b>Android</b><span>Lataa sovellus (≈11&nbsp;Mt APK)</span></div>
       <div class="chev">›</div>
     </a>
     <ol class="steps">
       <li>Avaa ladattu tiedosto ja salli asennus.</li>
-      <li>Syötä sama kokeiluavain ensimmäisellä käynnistyskerralla.</li>
+      <li>Syötä sama kokeiluavain, kun avaat sovelluksen ensimmäisen kerran.</li>
     </ol>
 
-    <a class="dl" id="webapp" href="/trial/app/">
-      <div class="t"><b>iPhone</b><span>Avaa verkkosovellus ja lisää se aloitusnäytölle</span></div>
+    <a class="dl" id="webapp" href="https://app.ease-health.org/app/">
+      <div class="t"><b>iPhone</b><span>Avaa Easen verkkosovellus ja lisää se kotivalikkoon</span></div>
       <div class="chev">›</div>
     </a>
     <ol class="steps">
       <li>Avaa Safarissa.</li>
-      <li>Napauta Jaa ja valitse <b>Lisää aloitusnäyttöön</b>.</li>
-      <li>Avaa sovellus kuvakkeesta — se toimii koko näytöllä.</li>
+      <li>Napauta Jaa ja valitse <b>Lisää Koti-valikkoon</b>.</li>
+      <li>Avaa sovellus kuvakkeesta. Se toimii koko näytöllä myös ilman verkkoa.</li>
+      <li>Sovellus on sama kuin Androidilla, kunnes iPhone-sovellus on TestFlightissa.</li>
     </ol>
 
     <p class="keytag">avain <span id="keymask"></span> · <a id="reset">käytä toista avainta</a></p>
-    <p class="fine">Molemmat sovellukset kirjaavat kokeilutapahtumat (annokset, vasteet, kohtaukset) easen kokeilutietokantaan, jotta tiimi näkee käytön. Demossa ei luoda terveystietorekisteriä. Sovellus itsessään on toistaiseksi englanninkielinen.</p>
+    <p class="fine">Molemmat sovellukset kirjaavat kokeilun tapahtumat (annokset, vasteet, kohtaukset) easen kokeilutietokantaan, jotta tiimi näkee käytön. Demossa ei synny terveystietoja potilasrekisteriin. Sovellus itse on toistaiseksi englanniksi.</p>
   </section>
 </main>
 <script>
 const SB="https://yolwyazckiqdjhepjiex.supabase.co";
 const ANON="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlvbHd5YXpja2lxZGpoZXBqaWV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDM3MDcsImV4cCI6MjEwMjUxOTcwN30.KpJWaelY1zenLyVZEHxNEhktNPUvQnneBEI6mYqXQVs";
 const KEYNAME="ease_trial_key";
-const MSG={
-  short:"Avain näyttää liian lyhyeltä.",
-  checking:"Tarkistetaan…",
-  unlock:"Avaa",
-  unknown:"Avainta ei tunnistettu. Tarkista se ja yritä uudelleen.",
-  offline:"Ei yhteyttä — yritä hetken kuluttua uudelleen."
-};
 const $=id=>document.getElementById(id);
 
 async function validate(k){
@@ -136,20 +159,25 @@ function showUnlocked(){
   $("gate").style.display="none";
   $("unlocked").style.display="block";
   $("keymask").textContent="····"+key.slice(-4);
+  // The APK is not a file on this site. /trial/download checks the key again,
+  // server-side, and redirects to a link that dies after a minute.
+  $("apk").href="/trial/download?k="+encodeURIComponent(key);
+ // The web app checks the key again on its own server before it serves any of its code.
+ $("webapp").href="https://app.ease-health.org/app/?k="+encodeURIComponent(key);
 }
 $("go").addEventListener("click",async()=>{
   const inp=$("key"),k=inp.value.trim().toUpperCase();
   inp.classList.remove("err");$("msg").textContent="";
-  if(k.length<8){inp.classList.add("err");$("msg").textContent=MSG.short;return}
-  $("go").disabled=true;$("go").textContent=MSG.checking;
+  if(k.length<8){inp.classList.add("err");$("msg").textContent="Avain näyttää liian lyhyeltä.";return}
+  $("go").disabled=true;$("go").textContent="Tarkistetaan…";
   try{
     if(await validate(k)){
       localStorage.setItem(KEYNAME,k);
       logEvent("gate_unlock",{src:"gate"});
       showUnlocked();
-    }else{inp.classList.add("err");$("msg").textContent=MSG.unknown}
-  }catch(e){$("msg").textContent=MSG.offline}
-  $("go").disabled=false;$("go").textContent=MSG.unlock;
+    }else{inp.classList.add("err");$("msg").textContent="Avainta ei tunnistettu. Tarkista se ja yritä uudelleen."}
+  }catch(e){$("msg").textContent="Ei yhteyttä. Yritä hetken päästä uudelleen."}
+  $("go").disabled=false;$("go").textContent="Avaa";
 });
 $("key").addEventListener("keydown",e=>{if(e.key==="Enter")$("go").click()});
 document.addEventListener("DOMContentLoaded",()=>{
@@ -160,6 +188,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   const q=new URLSearchParams(location.search).get("k");
   if(q)$("key").value=q.toUpperCase();
   if(localStorage.getItem(KEYNAME))showUnlocked();
+  // Back from the request form (app.ease-health.org/api/trial/request redirects here).
+  const r=new URLSearchParams(location.search).get("request");
+  const rm={requested:["ok","Kiitos! Lähetämme avaimen sähköpostiisi, kun pyyntö on hyväksytty."],
+    invalid:["msg","Täytä nimi, toimiva sähköposti ja puhelin, ja rastita suostumus."],
+    error:["msg","Jokin meni pieleen meidän päässämme. Yritä hetken päästä uudelleen tai kirjoita osoitteeseen konsta@ease-health.org."]}[r];
+  if(rm){$("rmsg").className=rm[0];$("rmsg").textContent=rm[1];}
 });
 </script>
 </body>

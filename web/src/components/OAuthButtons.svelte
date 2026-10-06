@@ -98,9 +98,9 @@
     gap: 10px;
     width: 100%;
     padding: 12px 18px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    background: var(--oauth-bg, rgba(255, 255, 255, 0.06));
+    border: 1px solid var(--oauth-border, rgba(255, 255, 255, 0.1));
+    border-radius: var(--button-radius, 12px);
     font-family: inherit;
     font-size: 13px;
     font-weight: 600;
@@ -114,9 +114,9 @@
   }
 
   .btn-oauth:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.16);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+    background: var(--oauth-bg-hover, rgba(255, 255, 255, 0.1));
+    border-color: var(--oauth-border-hover, rgba(255, 255, 255, 0.16));
+    box-shadow: var(--oauth-hover-shadow, 0 4px 16px rgba(0, 0, 0, 0.18));
     transform: translateY(-1px);
   }
 
@@ -154,7 +154,7 @@
     right: -6px;
     padding: 2px 8px;
     background: var(--purple, #6C63AC);
-    color: #fff;
+    color: var(--on-primary, #fff);
     font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.05em;

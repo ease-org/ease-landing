@@ -183,8 +183,18 @@ test.describe("Finnish trial gate (/fi/trial/)", () => {
     await expect(page.locator("#unlocked")).toBeVisible();
     await expect(page.locator("#unlocked h1")).toHaveText("Olet sisällä.");
     // Downloads point at the SAME shared assets as the English gate.
-    await expect(page.locator("#apk")).toHaveAttribute("href", "/trial/dusk-android.apk");
-    await expect(page.locator("#webapp")).toHaveAttribute("href", "/trial/app/");
+    await expect(page.locator("#apk")).toHaveAttribute("href", /^\/trial\/download\?k=/);
+    await expect(page.locator("#webapp")).toHaveAttribute("href", /^https:\/\/app\.ease-health\.org\/app\/\?k=/);
+  });
+
+  test("the key request form posts in Finnish and comes back to the Finnish page", async ({ page }) => {
+    await page.goto("/fi/trial/");
+    const form = page.locator("form");
+    await expect(form).toHaveAttribute("action", "https://app.ease-health.org/api/trial/request");
+    await expect(form.locator('input[name="lang"]')).toHaveValue("fi");
+    await expect(page.getByRole("button", { name: "Pyydä avain" })).toBeVisible();
+    await page.goto("/fi/trial/?request=requested#request");
+    await expect(page.locator("#rmsg")).toContainText("Kiitos");
   });
 
   test("the two gates cross-link each other", async ({ page }) => {
