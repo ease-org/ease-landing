@@ -26,8 +26,8 @@
     align-items: center;
     gap: 10px;
     padding: 10px 16px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: var(--badge-bg, rgba(255,255,255,0.04));
+    border: 1px solid var(--badge-border, rgba(255,255,255,0.08));
     border-radius: 12px;
     color: var(--text-2, #E0DDE6);
     text-decoration: none;
@@ -67,8 +67,8 @@
 
   .pill {
     padding: 3px 9px;
-    background: rgba(108,99,172,0.14);
-    border: 1px solid rgba(108,99,172,0.25);
+    background: var(--pill-bg, rgba(108,99,172,0.14));
+    border: 1px solid var(--pill-border, rgba(108,99,172,0.25));
     border-radius: 20px;
     font-size: 10px;
     font-weight: 700;
