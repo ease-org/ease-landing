@@ -4,6 +4,26 @@
       "source": "/oauth/consent",
       "destination": "/auth/oauth/consent",
       "statusCode": 301
+    },
+    {
+      "source": "/trial/app",
+      "destination": "https://app.ease-health.org/app/",
+      "statusCode": 301
+    },
+    {
+      "source": "/trial/app/:path*",
+      "destination": "https://app.ease-health.org/app/",
+      "statusCode": 301
+    },
+    {
+      "source": "/app",
+      "destination": "https://app.ease-health.org/app/",
+      "statusCode": 301
+    },
+    {
+      "source": "/app/:path*",
+      "destination": "https://app.ease-health.org/app/:path*",
+      "statusCode": 301
     }
   ],
   "rewrites": [
