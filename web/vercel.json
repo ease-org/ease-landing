@@ -6,6 +6,21 @@
       "statusCode": 301
     },
     {
+      "source": "/",
+      "has": [{ "type": "cookie", "key": "ease-lang", "value": "fi" }],
+      "destination": "/fi/",
+      "statusCode": 307
+    },
+    {
+      "source": "/",
+      "missing": [{ "type": "cookie", "key": "ease-lang" }],
+      "has": [
+        { "type": "header", "key": "accept-language", "value": "(?i)^fi.*$" }
+      ],
+      "destination": "/fi/",
+      "statusCode": 307
+    },
+    {
       "source": "/trial/app",
       "destination": "https://app.ease-health.org/app/",
       "statusCode": 301
