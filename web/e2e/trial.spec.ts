@@ -13,8 +13,8 @@ import { test, expect, type Page } from "@playwright/test";
  * server-side; `astro preview` serves only the static output, so these tests
  * cover the link the page builds, and that no APK is sitting in public/.
  *
- * The iPhone app is ease-web, a separate private Vercel project that this site
- * proxies at /app/ (rewrite in vercel.json). `astro preview` does not apply
+ * The iPhone app is ease-web, a separate project whose Worker
+ * serves at https://app.ease-health.org/app/ (a Cloudflare Worker). `astro preview` does not apply
  * vercel.json, so the tests cover the hand-off link and that the old static
  * demo under /trial/app/ is no longer part of the build.
  */
@@ -71,7 +71,7 @@ test.describe("Trial gate (/trial/)", () => {
     await page.locator("#go").click();
     await expect(page.locator("#unlocked")).toBeVisible();
     await expect(page.locator("#apk")).toHaveAttribute("href", `/trial/download?k=${VALID_KEY}`);
-    await expect(page.locator("#webapp")).toHaveAttribute("href", `/app/?k=${VALID_KEY}`);
+    await expect(page.locator("#webapp")).toHaveAttribute("href", `https://app.ease-health.org/app/?k=${VALID_KEY}`);
     await expect.poll(() => events.map((e) => e.kind)).toContain("gate_unlock");
     const unlock = events.find((e) => e.kind === "gate_unlock");
     expect(unlock?.trial_key).toBe(VALID_KEY);
